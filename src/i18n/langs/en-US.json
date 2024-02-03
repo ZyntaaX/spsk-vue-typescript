@@ -1,0 +1,12 @@
+{
+    "headers": {
+        "home": "Home",
+        "calendar": "Calendar",
+        "sponsors": "Sponsors",
+        "about_us": "About us",
+        "links": "Links",
+        "association_certificates": "Association certificates",
+        "my_account": "My account",
+        "signin": "Sign in"
+    }
+}
