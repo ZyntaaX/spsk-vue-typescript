@@ -7,6 +7,8 @@ import NavigationItem from './components/navigation-item.vue';
 import { ref } from 'vue';
 import { vOnClickOutside } from '@vueuse/components';
 
+import { getUserByID } from '../services/user/index.ts'
+
 const showExtendedMenu = ref(false);
 const extendedMenu = ref(null)
 
@@ -14,6 +16,9 @@ function toggleExtendedMenu(value: boolean) : void {
   console.log("SHOW MENU");
   
   showExtendedMenu.value = value;
+
+  console.log(getUserByID("1234567890"));
+  
 }
 
 function closeExtendedMenu() {

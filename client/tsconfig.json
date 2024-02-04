@@ -1,5 +1,10 @@
 {
   "files": [],
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "es2022",
+    "moduleResolution": "Node",
+  },
   "references": [
     {
       "path": "./tsconfig.node.json"
