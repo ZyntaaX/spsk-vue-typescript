@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16.1
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=spsk_dev
+    ports:
+      - 8080:5432
+    networks:
+      - spsk-shared-network
+    volumes:
+      - ./postgres-db:/var/lib/postgresql/data
+
+  # server:
+  #   container_name: spsk-server
+  #   restart: unless-stopped
+  #   image: spsk-server-prod:1.0.0
+  #   build:
+  #     context: server
+  #     target: production
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 5000:5000
+  #   networks:
+  #     - spsk-shared-network
+  #   depends_on:
+  #     - postgres
+
+  # client:
+  #   tty: true
+  #   container_name: spsk-client
+  #   # restart: unless-stopped
+  #   image: spsk-client-prod:1.0.0
+  #   build:
+  #     context: client
+  #     target: production
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 5050:5173
+  #   networks:
+  #     - spsk-shared-network
+  #   depends_on:
+  #     - server
+  
+
+networks:
+  spsk-shared-network:

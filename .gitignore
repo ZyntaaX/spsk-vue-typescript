@@ -20,6 +20,8 @@ coverage
 /cypress/videos/
 /cypress/screenshots/
 
+postgres-db
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

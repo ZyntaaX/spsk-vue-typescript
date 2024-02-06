@@ -20,6 +20,18 @@ __IN PROGRESS! This setup does not yet work!__
 
 Test api: https://www.postman.com/downloads/
 
+Docker desktop: https://docs.docker.com/get-docker/
+
+Docker DB: docker run --name Postgres -e POSTGRES_PASSWORD=password -p 8000:5432 -d postgres
+
+Add user to DB: 
+```sql
+CREATE USER developer WITH PASSWORD 'developer' SUPERUSER
+```
+
+env files:
+
+
 
 ## Why a public repo?
 It wont be later on, but for now it will be :)

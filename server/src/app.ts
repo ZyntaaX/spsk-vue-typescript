@@ -21,8 +21,13 @@ app.get('/status', (req: Request, res: Response) => {
 app.get('/user/:userid', (req: Request, res: Response) => {
   const userid: string = req.params.userid;
 
-  const result = db.query('SELECT * FROM users', [])
-  console.log("RESULT: ", result);
+  db.query('SELECT * FROM users', [])
+    .then((res) => {
+      console.log("RESULT:", res);
+    })
+    .catch((error) => {
+      console.log("ERROR:", error);
+    })
   
 
   res.status(200).send({

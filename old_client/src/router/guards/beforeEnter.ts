@@ -1,4 +1,5 @@
-import router from "../index"
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// import router from "../index"
 
 export function userExists(_to: any, _from: any, next: any): void {
     // eslint-disable-next-line no-constant-condition
