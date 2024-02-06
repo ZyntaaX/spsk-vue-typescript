@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import * as db from './pg/db'
+import https from 'https';
 
 // For env File 
 dotenv.config();
@@ -21,13 +22,14 @@ app.get('/status', (req: Request, res: Response) => {
 app.get('/user/:userid', (req: Request, res: Response) => {
   const userid: string = req.params.userid;
 
-  db.query('SELECT * FROM users', [])
-    .then((res) => {
-      console.log("RESULT:", res);
-    })
-    .catch((error) => {
-      console.log("ERROR:", error);
-    })
+  // db.query('SELECT * FROM users', [])
+  //   .then((res) => {
+  //     console.log("RESULT:", res);
+  //   })
+  //   .catch((error) => {
+  //     console.log("ERROR:", error);
+  //   })
+  console.log("SUCCESS");
   
 
   res.status(200).send({
@@ -37,6 +39,12 @@ app.get('/user/:userid', (req: Request, res: Response) => {
   });
 });
 
+// app.listen(port, () => {
+//   console.log(`Server is listening at http://localhost:${port}`);
+// });
+
+// var httpsServer = https.createServer(app);
+
 app.listen(port, () => {
   console.log(`Server is listening at http://localhost:${port}`);
-});
+})

@@ -11,9 +11,13 @@
     "composite": true,
     "noEmit": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-
-    "module": "ESNext",
+    "module": "esnext",
     "moduleResolution": "Bundler",
     "types": ["node"]
-  }
+  },
+  "filesGlob": [
+    "**/*.ts",
+    ".serverless_plugins/**/*.ts",
+    "!node_modules/**"
+  ],
 }

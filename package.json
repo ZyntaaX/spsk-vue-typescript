@@ -7,7 +7,7 @@
         "server": "cd server && yarn start:develop",
         "install:server": "cd server && yarn",
         "install:client": "cd client && yarn",
-        "postinstall": "npm-run-all install:*",
+        "postinstall": "run-p install:*",
         "clear-db": "rm -rf postgres-db",
         "clear-node-modules": "npx npkill",
         "clear-project": "rm -rf ./**/dist && yarn clear-node-modules",
@@ -23,5 +23,9 @@
         "postinstall": "^0.9.0",
         "tsc-watch": "^6.0.4",
         "vite": "^5.0.12"
+    },
+    "resolutions": {
+        "string-width": "4.2.3",
+        "cliui": "7.0.4"
     }
 }

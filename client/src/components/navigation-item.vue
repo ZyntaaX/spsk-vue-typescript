@@ -26,15 +26,14 @@ defineProps({
 
 <style lang="scss" scoped>
     .nav-item {
-      // resize: none;
       margin: 0 1rem;
       text-align: center;
       a {
         color: var(--link-color);
         margin: auto 0;
         text-decoration: none;
-      }
 
+        }
     }
 
     .underline {
@@ -58,7 +57,7 @@ defineProps({
 
     a:hover {
         color: var(--link-color);
-        // opacity: 0.2;
+
         .underline {
             transform: scaleX(1);
         }

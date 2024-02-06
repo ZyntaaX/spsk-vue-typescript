@@ -10,5 +10,10 @@
     {
       "path": "./tsconfig.vitest.json"
     }
-  ]
+  ],
+  "filesGlob": [
+    "**/*.ts",
+    ".serverless_plugins/**/*.ts",
+    "!node_modules/**"
+  ],
 }
