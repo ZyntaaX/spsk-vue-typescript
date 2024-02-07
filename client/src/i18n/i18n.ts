@@ -7,7 +7,7 @@ type MessageSchema = typeof enUS;
 
 const userLocale = navigator.language;
 
-export default createI18n<
+const i18n = createI18n<
   [MessageSchema],
   // Add supported locales
   'en-US' | 'en' | 'sv-SE' | 'sv'>({
@@ -17,4 +17,7 @@ export default createI18n<
     'en-US': enUS, 'en': enUS,
     'sv-SE': svSE, 'sv': svSE
   },
+  globalInjection: true,
 });
+
+export default i18n;

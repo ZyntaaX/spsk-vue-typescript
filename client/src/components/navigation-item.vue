@@ -29,7 +29,7 @@ defineProps({
       margin: 0 1rem;
       text-align: center;
       a {
-        color: var(--link-color);
+        color: var(--primary-color);
         margin: auto 0;
         text-decoration: none;
 
@@ -37,7 +37,7 @@ defineProps({
     }
 
     .underline {
-        background-color: var(--link-color);
+        background-color: var(--primary-color);
         border-radius: 0.1rem;
         width: 100%;
         height: 3px;
@@ -48,7 +48,7 @@ defineProps({
     }
 
     a.router-link-exact-active {
-        color: var(--link-color);
+        color: var(--primary-color);
 
         .underline {
             transform: scaleX(0.8);
@@ -56,7 +56,7 @@ defineProps({
     }
 
     a:hover {
-        color: var(--link-color);
+        color: var(--primary-color);
 
         .underline {
             transform: scaleX(1);
@@ -87,7 +87,7 @@ defineProps({
       // } 
         
       // :link, :visited {
-      //   color: var(--link-color);
+      //   color: var(--primary-color);
       //   text-decoration: none;
       // }
 

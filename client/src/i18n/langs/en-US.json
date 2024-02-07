@@ -9,5 +9,9 @@
         "my_account": "My account",
         "signin": "Sign in",
         "menu": "Menu"
+    },
+    "error_messages": {
+        "auth_invalid_credentials": "Email and/or password is incorrect.",
+        "auth_generic_message": "An unexpected error occurred. Please try again later."
     }
 }

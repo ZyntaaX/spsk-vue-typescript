@@ -24,7 +24,7 @@ export async function runMigrations(): Promise<void> {
                 CREATE TABLE IF NOT EXISTS ${MIGRATION_TABLE_NAME} (
                     id bigint NOT NULL UNIQUE,
                     name text NOT NULL,
-                    executed_on timestamp NOT NULL DEFAULT NOW(),
+                    executed_on TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                     CONSTRAINT pgmigrations_pk PRIMARY KEY (id)
                 );
             `);

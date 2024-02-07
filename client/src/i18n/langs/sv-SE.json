@@ -9,5 +9,9 @@
         "my_account": "Mina sidor",
         "signin": "Logga in",
         "menu": "Meny"
+    },
+    "error_messages": {
+        "auth_invalid_credentials": "Email och/eller lösenord är felaktigt.",
+        "auth_generic_message": "Ett oväntat fel uppstod. Försök igen senare."
     }
 }

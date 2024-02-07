@@ -7,21 +7,30 @@ import NavigationItem from './components/navigation-item.vue';
 import { ref } from 'vue';
 import { vOnClickOutside } from '@vueuse/components';
 
-import { getUserByID } from '@/services/user'
+import { useAuthenticationStore } from './shared/stores/authentication-store';
+import { ButtonElement } from './components/elements';
+import router from './router';
 
 const showExtendedMenu = ref(false);
 const extendedMenu = ref(null)
 
-function toggleExtendedMenu(value: boolean) : void {
-  console.log("SHOW MENU");
-  
-  showExtendedMenu.value = value;
+const authStore = useAuthenticationStore();
 
-  console.log(getUserByID("1234567890"));
+function toggleExtendedMenu(value: boolean) : void {
+  showExtendedMenu.value = value;
 }
 
 function closeExtendedMenu() {
   showExtendedMenu.value = false;
+}
+
+async function signOut() {
+  await authStore.signOut()
+    .then(() => {
+      showExtendedMenu.value = false;
+      router.push({ name: "Home" })
+    })
+    .catch((error) => console.log(error))
 }
 
 </script>
@@ -39,7 +48,7 @@ function closeExtendedMenu() {
       <font-awesome-icon class="close-extended-menu--button" @click="toggleExtendedMenu(false)" icon="fa-solid fa-xmark"></font-awesome-icon>
       <nav>
         <NavigationItem route="/user/not_defined" :title="$t('headers.my_account')" />
-        <NavigationItem route="/user/not_defined" :title="$t('headers.logout')" />
+        <ButtonElement v-if="authStore.isSignedIn" @click="signOut">{{ $t('headers.logout') }}</ButtonElement>
       </nav>
     </div>
   </div>
@@ -64,7 +73,7 @@ function closeExtendedMenu() {
         <NavigationItem route="/association-certificates" :title="$t('headers.association_certificates')" />
         <div class="place-right">
           <!-- <NavigationItem route="/user/not_defined" :title="$t('headers.my_account')" /> -->
-          <NavigationItem route="/login" :title="$t('headers.signin')" />
+          <NavigationItem v-if="!authStore.isSignedIn" route="/login" :title="$t('headers.signin')" />
         </div>
       </nav>
       <div class="burger-menu-button" @click="toggleExtendedMenu(true)">
@@ -91,11 +100,13 @@ function closeExtendedMenu() {
 }
 
 .main-view--wrapper {
-  background-color: red;
+  background-color: var(--vt-c-black-mute);
   width: 1000px;
   // height: 100%;
-  margin: 1rem auto;
+  margin: 0.5rem auto;
+  border-radius: 0.2rem;
   overflow-y: auto;
+  padding: 0.5rem;
 }
 
 footer {
@@ -217,7 +228,7 @@ header {
 
       &:hover {
         cursor: pointer;
-        color: var(--link-color);
+        color: var(--primary-color);
       }
     }
   }
@@ -244,7 +255,7 @@ header {
 
     :hover {
       cursor: pointer;
-      color: var(--link-color);
+      color: var(--primary-color);
     }
 
   }

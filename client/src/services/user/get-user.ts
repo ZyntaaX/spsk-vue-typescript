@@ -7,12 +7,24 @@ import Api from '../api';
 //     registeredAt: string; // Change to timestamp later on
 // } | undefined;
 
-export async function getUserByID(id: string) : Promise<void> {
-    await Api().get(`/user/${id}`)
-    .then((response: any) => {
-        console.log("WE GOT RESPONSE: ", response);
-    })
-    .catch((error) => {
-        console.log("CAUGHT ERROR: ", error);
-    })
+export async function signInUserFromExternalAuthentication(externalID: string, email: string, token: string) : Promise<boolean> {
+    try {
+        await Api().post(`/user/signin-external`, { external_id: externalID, email, auth_token: token })
+        .then(() => {
+            console.log("Signed in successfully");
+            
+            return true;
+        })
+        .catch((error) => {
+            console.log("ERROR SIGNING IN FROM API");
+            
+            throw error;
+        })
+        return true;
+    } catch (err) {
+        console.log("Error in API call: ", err);
+        return false;
+    }
 }
+
+// export async function getUserOrCreateInDB()
