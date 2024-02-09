@@ -11,7 +11,7 @@
 <style lang="scss" scoped>
 
 .content-wrapper {
-    background-color: var(--vt-c-black-soft);
+    background-color: var(--color-main-content-bg);
     padding: 0.5rem;
 }
 

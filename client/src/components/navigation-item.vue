@@ -26,13 +26,17 @@ defineProps({
 
 <style lang="scss" scoped>
     .nav-item {
-      margin: 0 1rem;
-      text-align: center;
-      a {
-        color: var(--primary-color);
-        margin: auto 0;
-        text-decoration: none;
+        margin: 0 1rem;
+        text-align: center;
 
+        a {
+            color: var(--primary-color);
+            margin: auto 0;
+            text-decoration: none;
+        }
+
+        h3 {
+            font-weight: 600;
         }
     }
 
@@ -41,6 +45,7 @@ defineProps({
         border-radius: 0.1rem;
         width: 100%;
         height: 3px;
+        margin-top: 5px;
         -webkit-transition: all 0.3s ease;
         -moz-transition: all 0.3s ease;
         transition: all 0.3s ease;

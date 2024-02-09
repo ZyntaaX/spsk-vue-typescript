@@ -12,8 +12,8 @@ const pool = new Pool({
     database: process.env.PG_DATABASE
 });
 
-const query = async (query: string, params?: any): Promise<QueryResult> => {
+const queryDB = async (query: string, params?: any): Promise<QueryResult> => {
     return pool.query(query, params);
 };
 
-export { query };
+export { queryDB };

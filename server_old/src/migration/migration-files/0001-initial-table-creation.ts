@@ -1,8 +1,10 @@
-import * as pg from '../../pg/db'
+import { queryDB } from '../../pg/db'
+// const pg = require('../../pg/db');
 import { MigrationFunction } from '../run-migrations'
+// const { type MigrationFunction } = require('../run-migrations')
 
 const migration: MigrationFunction = async () => {
-    await pg.query(`
+    await queryDB(`
         CREATE TABLE IF NOT EXISTS users (
             id uuid UNIQUE NOT NULL DEFAULT uuid_generate_v4(),
 
@@ -23,7 +25,7 @@ const migration: MigrationFunction = async () => {
         );
     `);
 
-    // await pg.query(`
+    // await queryDB(`
     //     CREATE TABLE IF NOT EXISTS roles (
     //         id 
     //         security_level: bigint NOT NULL

@@ -21,43 +21,70 @@
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
 }
 
+
 /* semantic color variables for this project */
-:root {
-  --color-background: rgb(204, 204, 204);
+/* :root { */
+  /* --color-background: rgb(204, 204, 204);
   --color-background-soft: rgb(150, 150, 150);
   --color-background-mute: var(--vt-c-white-mute)rgba(1,1,1);
   --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
-
+  --color-border-hover: var(--vt-c-divider-light-1); */
+/* 
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
 
   --primary-color: hsla(160, 100%, 37%, 1);
-  --secondary-color: rgb(25, 131, 95);
+  --secondary-color: rgb(15, 88, 64);
 
   --color-heading: var(--vt-c-text-dark-1);
   --color-text: rgb(170, 170, 170);
   --button-text-color: rgb(41, 41, 41);
 
   --error-color: rgba(219, 68, 68, 0.863);
-}
+  --error-color-secondary: rgba(133, 40, 40, 0.863); */
+/* 
+  --color-background: rgb(226, 226, 226);
+  --color-main-content-bg: rgb(255, 255, 255);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--vt-c-black);
+  --color-border: var(--vt-c-divider-dark-2);
+  --color-border-hover: var(--vt-c-divider-dark-1);
+
+  --primary-color: rgb(52, 141, 111);
+  --secondary-color: rgb(15, 88, 64);
+
+  --color-heading: var(--vt-c-text-dark-1);
+  --color-text: rgb(0, 0, 0);
+  --button-text-color: rgb(49, 42, 42);
+
+  --error-color: rgba(219, 68, 68, 0.863);
+  --error-color-secondary: rgba(133, 40, 40, 0.863);
+} */
+
+/* @media (prefers-color-scheme: dark) {
+  :root { */
+    /* --color-background: var(--vt-c-black);
     --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
+    --color-background-mute: var(--vt-c-black-mute); */
+
+    /* --color-background: var(--vt-c-black);
+    --color-main-content-bg: var(--vt-c-black-mute);
 
     --color-border: var(--vt-c-divider-dark-2);
     --color-border-hover: var(--vt-c-divider-dark-1);
 
+    --primary-color: hsla(160, 100%, 37%, 1);
+    --secondary-color: rgb(15, 88, 64);
+
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: rgb(170, 170, 170);
-    --button-text-color: rgb(41, 41, 41);
+    --button-text-color: rgb(49, 42, 42);
+
+    --error-color: rgba(219, 68, 68, 0.863);
+    --error-color-secondary: rgba(133, 40, 40, 0.863);
   }
-}
+} */
 
 *,
 *::before,

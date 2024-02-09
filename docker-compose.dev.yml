@@ -3,7 +3,7 @@ version: "3.8"
 services:
   postgres:
     image: postgres:16.1
-    restart: always
+    restart: unless-stopped # always
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=spsk_dev
@@ -36,14 +36,14 @@ services:
   #   image: spsk-client-prod:1.0.0
   #   build:
   #     context: client
-  #     target: production
+  #     target: build-stage
   #     dockerfile: Dockerfile
   #   ports:
-  #     - 5050:5173
+  #     - 8080:80  # 5050:15432 # 5173
   #   networks:
   #     - spsk-shared-network
-  #   depends_on:
-  #     - server
+    # depends_on:
+    #   - server
   
 
 networks:

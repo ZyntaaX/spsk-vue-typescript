@@ -14,4 +14,4 @@ COPY . .
 
 RUN yarn build
 
-CMD ["sh", "-c", "yarn start:production"]
+CMD ["sh", "-c", "yarn start:production", "--experimental-modules"]

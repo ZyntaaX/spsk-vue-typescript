@@ -1,53 +1,66 @@
-# FROM node:20.10.0 AS Production
+# TODO: WORKS FOR LOCAL!!!
+# # build stage
+# FROM node:lts-alpine as build-stage
 
-# ENV NODE_ENV=production
+# # Set the working directory in the container
+# WORKDIR /app
 
-# # install simple http server for serving static content
-# RUN yarn add http-server
+# # Copy package.json and package-lock.json to the working directory
+# COPY package*.json ./
 
-# WORKDIR /spsk/client
+# # Install dependencies
+# RUN npm install
 
-# COPY package.json .
-# COPY yarn.lock .
-
-# RUN yarn
-
-# # Copy entire server
+# # Copy the rest of the application code
 # COPY . .
 
-# RUN yarn build
+# # Build the Vue.js application for production
+# RUN npm run build
 
-# EXPOSE 8080
-# # CMD ["sh", "-c", "yarn start"]
-# CMD [ "http-server", "dist" ]
+# # Expose port 80 to the outside world
+# EXPOSE 80
 
-# Base image
-FROM node:20.10.0 AS Production
+# # Command to run the application
+# CMD ["npm", "run", "dev"]
 
-# Set working directory
+# TODO: - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+# Use an official Node.js runtime as the base image
+# FROM node:14-alpine AS build
+FROM node:lts-alpine as build-stage
+
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
-COPY yarn.lock ./
 
 # Install dependencies
-RUN yarn
+RUN npm install
 
-# Copy the rest of the app's code
+# Copy the rest of the application code
 COPY . .
 
-# Build the app
-RUN yarn build
+# Build the Vue.js application for production
+RUN npm run build
 
-# Production image
-FROM nginx:1.21
+# # Stage 2: Serve the Vue.js application using a lightweight HTTP server
+# FROM nginx:alpine
 
-# Copy built app from previous stage
-COPY --from=Production /app/dist /usr/share/nginx/html
+# # Copy the built Vue.js app from the previous stage
+# COPY --from=build-stage /app/dist /usr/share/nginx/html
+# COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose port 80
-EXPOSE 5173
+# # Expose port to the outside world
+# # For HTTPS
+# # EXPOSE 443
+# # For HTTP
+# EXPOSE 9000
 
-# Start Nginx server
-CMD ["nginx", "-g", "daemon off;"]
+# # Command to run the NGINX server
+# CMD ["nginx", "-g", "daemon off;"]
+
+FROM nginx as production-stage
+RUN mkdir /app
+COPY --from=build-stage /app/dist /app
+COPY nginx.conf /etc/nginx/nginx.conf

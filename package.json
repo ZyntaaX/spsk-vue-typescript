@@ -1,5 +1,6 @@
 {
     "name": "spsk-fullstack",
+    "type": "module",
     "scripts": {
         "start": "concurrently \"yarn server\" \"yarn client\" --names \"server,client\" --prefix-colors \"magenta,green\"",
         "build": "tsc -b .",
@@ -11,8 +12,9 @@
         "clear-db": "rm -rf postgres-db",
         "clear-node-modules": "npx npkill",
         "clear-project": "rm -rf ./**/dist && yarn clear-node-modules",
-        "docker-up": "docker compose up -d",
-        "docker-down": "docker compose down"
+        "docker-up": "docker compose -f docker-compose.dev.yml up -d",
+        "docker-up-production": "docker compose -f docker-compose.prod.yml up -d",
+        "docker-down": "docker compose -f docker-compose.dev.yml -f docker-compose.prod.yml down"
     },
     "devDependencies": {
         "concurrently": "^8.2.2",

@@ -33,10 +33,19 @@ const model = defineModel();
 
 .input-element {
     // background-color: var(--);
-    border: 1px solid var(--secondary-color);
+    border: 2px solid var(--secondary-color);
+    border-radius: 4px;
     padding: 5px;
     font-size: 1rem;
     font-weight: 600;
+    height: 2rem;
+    background-color: var(--vt-c-text-dark-2);
+    color: var(--button-text-color);
+
+    &:focus {
+        border: 2px solid var(--primary-color);
+        outline: none;
+    }
 
     &.center {
         text-align: center;

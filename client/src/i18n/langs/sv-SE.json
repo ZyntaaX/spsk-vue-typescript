@@ -2,16 +2,18 @@
     "headers": {
         "home": "Hem",
         "calendar": "Kalender",
-        "sponsors": "Sponsors",
+        "sponsors": "Sponsorer",
         "about_us": "Om oss",
         "links": "Länkar",
         "association_certificates": "Föreningsintyg",
         "my_account": "Mina sidor",
         "signin": "Logga in",
-        "menu": "Meny"
+        "menu": "Meny",
+        "settings": "Inställningar"
     },
     "error_messages": {
         "auth_invalid_credentials": "Email och/eller lösenord är felaktigt.",
-        "auth_generic_message": "Ett oväntat fel uppstod. Försök igen senare."
+        "auth_generic_message": "Ett oväntat fel uppstod. Försök igen senare.",
+        "auth_server_failed_auth": "Servern kunde inte verifiera dig. Om problemet kvarstår, kontakta systemadministratör."
     }
 }

@@ -1,0 +1,12 @@
+{
+    "files": [],
+    "references": [
+        { "path": "server" },
+        { "path": "client" }
+    ],
+    "compilerOptions": {
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",   
+        "allowImportingTsExtensions": true
+    }
+}

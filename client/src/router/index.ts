@@ -11,6 +11,10 @@ import LoginView from '@/views/login/login-view.vue';
 import UserPageView from "@/views/user/user-page-view.vue";
 import BugReportView from "@/views/bug-report/bug-report-view.vue";
 import FourOhFourView from "@/views/404/404-view.vue";
+import SettingsView from '@/views/settings/settings-view.vue';
+
+import { useAuthenticationStore } from '@/shared/stores/authentication-store'
+
 
 
   // route level code-splitting
@@ -55,7 +59,8 @@ const router = createRouter({
     {
       path: '/login',
       name: 'LoginPage',
-      component: LoginView
+      component: LoginView,
+      
     },
     {
       path: '/bug-report',
@@ -64,6 +69,11 @@ const router = createRouter({
       meta: {
         requiresAuth: true,
       }
+    },
+    {
+      path: '/settings',
+      name: "Settings",
+      component: SettingsView,
     },
     
     /* This catchAll should always be placed as the last route-check! */
@@ -75,20 +85,42 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, _from, next) => {
-    if (to.meta.requiresAuth) {
-      const token = localStorage.getItem('token');
-      if (token) {
-        // User is authenticated, proceed to the route
-        next();
-      } else {
-        // User is not authenticated, redirect to login
-        next('/login');
-      }
+import { firebaseAuth } from '@/services/authentication/firebase-client';
+import { signInWithBackend } from '@/shared/stores/authentication-store';
+import { useRouterStore } from './router-store';
+
+// import { useAuthenticationStore } from '@/shared/stores/authentication-store'
+
+router.beforeEach(async (to, _from, next) => {
+  const routerStore = useRouterStore();
+  const authStore = useAuthenticationStore();
+  if (to.meta.requiresAuth) {
+    console.log("WE GET HERE FROM: ", _from.name);
+    
+    if (firebaseAuth.currentUser && authStore.isUserSignedIn) {
+      // TODO: Do we really need to check backend aswell?
+      // await signInWithBackend(firebaseAuth.currentUser.uid, firebaseAuth.currentUser.email ?? "")
+      //   .then((result) => {
+      //     if (result) {
+      //       // User authorization successful
+              next();
+          // } else {
+          //   routerStore.setIntendedRoute(to)
+          //   next({ name: "LoginPage" }); 
+          // }
+        // })
+        // .catch(() => {
+        //   next({ name: "LoginPage" }); 
+        // })
+
     } else {
-      // Non-protected route, allow access
-      next();
+      routerStore.setIntendedRoute(to)
+      next({ name: "LoginPage" }); 
     }
-  });
+  } else {
+    // Non-protected route, allow access
+    next();
+  }
+});
 
 export default router

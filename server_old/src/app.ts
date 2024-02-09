@@ -3,10 +3,9 @@ import express, { Request, Response, Application } from 'express';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import * as db from './pg/db'
+// import { queryDB } from './pg/db'
 import https from 'https';
 import { runMigrations } from './migration/run-migrations'
-import { getAuth } from "firebase/auth";
 
 import userRoutes from './routes/user-routes'
 

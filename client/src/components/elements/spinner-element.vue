@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
 .spinner-element {
     width: 48px;
     height: 48px;
-    border: 3px solid #FFF;
+    border: 3px solid var(--color-text);
     border-radius: 50%;
     display: inline-block;
     position: relative;

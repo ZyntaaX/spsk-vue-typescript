@@ -1,4 +1,4 @@
-import * as pg from '../pg/db';
+import { queryDB } from '../pg/db';
 import fs from 'fs';
 import * as path from 'path';
 
@@ -10,7 +10,7 @@ export async function runMigrations(): Promise<void> {
     
     try {
         // Create the uuid-ossp extension if not exists
-        await pg.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`);
+        await queryDB(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`);
 
         // Check if the migration table exists
         const migrationTableExists = await doesMigrationTableExist();
@@ -20,7 +20,7 @@ export async function runMigrations(): Promise<void> {
             console.log("\u001b[1;33mMigrations table does not exist in DB. Creating it now...");
             console.log("\u001b[0m");
 
-            await pg.query(`
+            await queryDB(`
                 CREATE TABLE IF NOT EXISTS ${MIGRATION_TABLE_NAME} (
                     id bigint NOT NULL UNIQUE,
                     name text NOT NULL,
@@ -37,7 +37,7 @@ export async function runMigrations(): Promise<void> {
         }
 
         // Find the latest (highest) migration that took place
-        await pg.query(`SELECT MAX(id) FROM ${MIGRATION_TABLE_NAME}`).then(async (res) => {
+        await queryDB(`SELECT MAX(id) FROM ${MIGRATION_TABLE_NAME}`).then(async (res) => {
             // Run actual migrations
             await runAllMigrationFiles(res.rows[0].max).then()
         })
@@ -54,7 +54,7 @@ export async function runMigrations(): Promise<void> {
 async function doesMigrationTableExist(): Promise<boolean> {
     try {
         // Check if the migration table exists
-        const result = await pg.query(`
+        const result = await queryDB(`
             SELECT EXISTS (
                 SELECT 1
                 FROM information_schema.tables 
@@ -80,7 +80,7 @@ async function runAllMigrationFiles(maxMigrationResult: number): Promise<void> {
             
             if (match) {
                 const filePath = path.resolve(MIGRATION_FILES_PATH, file)
-                const migration = require(filePath).default as MigrationFunction;
+                const migration = require(filePath).default;
                 migrationFiles.push({ id: parseInt(match[1]), name: match[2], fileName: file, migration })
             } else {
                 console.error("\u001b[1;31mMigration file name doesn't match the format \"DDD-some-name.ts\"");
@@ -114,7 +114,7 @@ async function runAllMigrationFiles(maxMigrationResult: number): Promise<void> {
 async function performMigrations(migrationFiles: MigrationFile[]) : Promise<void> {
     migrationFiles.sort((a: MigrationFile, b: MigrationFile) => a.id > b.id ? 1 : -1)
     
-    await pg.query("BEGIN TRANSACTION;");
+    await queryDB("BEGIN TRANSACTION;");
 
     try {
 
@@ -124,7 +124,7 @@ async function performMigrations(migrationFiles: MigrationFile[]) : Promise<void
             if (file.migration) {
                 try {
                     await file.migration()
-                    await pg.query(`INSERT INTO ${MIGRATION_TABLE_NAME} (id, name) VALUES ($1, $2) `, [file.id, file.name])
+                    await queryDB(`INSERT INTO ${MIGRATION_TABLE_NAME} (id, name) VALUES ($1, $2) `, [file.id, file.name])
                 } catch (err) {
                     throw err
                 }
@@ -133,11 +133,11 @@ async function performMigrations(migrationFiles: MigrationFile[]) : Promise<void
             }
         }
 
-        await pg.query("COMMIT TRANSACTION;");
+        await queryDB("COMMIT TRANSACTION;");
     } catch (err) {
         console.error("\u001b[1;31mAn error has occured during migration. Rolling back transactions...");
         console.log("\u001b[0m");
-        await pg.query("ROLLBACK TRANSACTION;");
+        await queryDB("ROLLBACK TRANSACTION;");
         throw err;
     }
 

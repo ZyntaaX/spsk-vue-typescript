@@ -10,7 +10,6 @@
             <p class="error-message" style="height: 2rem;">{{ errorMessage ?? "" }}</p>
 
             <ButtonElement @click="signIn" :size="'MEDIUM'">Login</ButtonElement>
-
         </ContentWrapper>
         <ContentWrapper v-else class="wrapper">
             <SpinnerElement style="margin: auto 0" />
@@ -25,8 +24,12 @@ import { useAuthenticationStore } from '@/shared/stores/authentication-store'
 import { ref } from 'vue';
 import { ButtonElement, InputElement, SpinnerElement } from '@/components/elements'
 import router from '@/router';
+import { useRouterStore } from '@/router/router-store';
+import { onMounted } from 'vue';
+import { firebaseAuth } from '@/services/authentication/firebase-client';
 
 const authStore = useAuthenticationStore();
+const routerStore = useRouterStore();
 
 const errorMessage = ref("");
 const loading = ref(false);
@@ -34,16 +37,32 @@ const loading = ref(false);
 const emailRef = ref("")
 const passwordRef = ref("")
 
+onMounted(() => {
+    const unsubscribe = firebaseAuth.onAuthStateChanged(function(user) {
+        if (user) {
+            if (routerStore.intendedRoute) {
+                router.push(routerStore.intendedRoute)
+            } else {
+                router.push({ name: 'Home' })
+            }
+        }
+        unsubscribe();
+    });
+})
+
 async function signIn() {
     errorMessage.value = ""
     loading.value = true;
     await authStore.signIn(emailRef.value, passwordRef.value)
-        .then((results) => {
-            router.push({ name: "Home" })
+        .then(() => {
+            if (routerStore.intendedRoute) {
+                router.push(routerStore.intendedRoute)
+            } else {
+                router.push({ name: "Home" })
+            }
         })
         .catch((error) => {
             errorMessage.value = error;
-            console.log("LOGIN VIEW ERROR: ", error);
         })
         .finally(() => {
             loading.value = false;

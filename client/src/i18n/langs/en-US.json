@@ -8,10 +8,12 @@
         "association_certificates": "Association certificates",
         "my_account": "My account",
         "signin": "Sign in",
-        "menu": "Menu"
+        "menu": "Menu",
+        "settings": "Settings"
     },
     "error_messages": {
         "auth_invalid_credentials": "Email and/or password is incorrect.",
-        "auth_generic_message": "An unexpected error occurred. Please try again later."
+        "auth_generic_message": "An unexpected error occurred. Please try again later.",
+        "auth_server_failed_auth": "Server failed to authorize you. If the problem persists, please contact a system administrator."
     }
 }

@@ -2,26 +2,41 @@ import { defineStore } from 'pinia';
 import { firebaseApp, firebaseAuth, signInWithEmailAndPassword, signOut, getAuthError } from '../../services/authentication/firebase-client'
 import { DateTime } from 'luxon';
 import { signInUserFromExternalAuthentication } from '../../services/user'
+import { computed } from 'vue';
 
 // const firebaseAuth = getAuth(firebaseApp);
+
+const LOCALSTORAGE_KEY_AUTH_STORES_STATE = "AUTH:STORED:STATE";
 
 const AUTHENTICATION_STORE_ID = 'STORE:AUTHENTICATION';
 
 export const useAuthenticationStore = defineStore(AUTHENTICATION_STORE_ID, {
     state: (): AuthenticationState => ({
-        // auth: getAuth(firebaseApp),
-        isSignedIn: true, // Start as true to hide login button until firestore state has been fetched
-        user: undefined
+        isSignedIn: JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY_AUTH_STORES_STATE) ?? "{}")?.isSignedIn ?? false, // TODO: Start as true to hide login button until firestore state has been fetched
+        user: JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY_AUTH_STORES_STATE) ?? "{}")?.user ?? undefined,
     }),
 
     getters: {
-        isUserSignedIn(): boolean {
-            // TODO: Verify with firebase
-            return true;
-        }
+        isUserSignedIn: (state) : boolean => {
+            return state.isSignedIn;
+        },
     },
 
     actions: {
+        setUser(userData: UserData) : void {
+            if (userData) {
+                this.isSignedIn = true;
+                this.user = userData;
+
+                localStorage.setItem(LOCALSTORAGE_KEY_AUTH_STORES_STATE, JSON.stringify(this.$state))
+            }
+        },
+        clearUser() : void {
+            localStorage.removeItem(LOCALSTORAGE_KEY_AUTH_STORES_STATE)
+            this.isSignedIn = false;
+            this.user = undefined;
+
+        },
         async signIn(email: string, password: string) : Promise<boolean> {
             return new Promise((resolve, reject) => {
                 try {
@@ -29,19 +44,25 @@ export const useAuthenticationStore = defineStore(AUTHENTICATION_STORE_ID, {
                         .then(async (results) => {
                             // User signed in via Firebase, try our server aswell
                             await signInWithBackend(results.user.uid, email)
-                                .then(async (loggedIn) => {
-                                    if (loggedIn) {
+                                .then((userData: UserData) => {
+                                    if (userData) {
                                         // Successfully logged in
-                                        this.isSignedIn = true;
+                                        this.setUser(userData)
                                         resolve(true);
                                     } else {
                                         // Failed, log out from firebase
                                         signOut(firebaseAuth)
-                                            .then(() => { throw new Error("Failed to log in via postgres"); })
+                                            .then(() => { reject(getAuthError("auth/custom-server-failed-authorization")) })
                                             .catch((error) => { reject(error) })
                                     }
                                 })
-                                .catch((error) => { reject(error) })
+                                .catch((error) => {
+                                    // Failed, log out from firebase
+                                    signOut(firebaseAuth)
+                                        .then(() => { reject(getAuthError("auth/custom-server-failed-authorization")) })
+                                        .catch((error) => { reject(error) })
+                                    reject(error)
+                                })
                         })
                         .catch((error) => { reject(getAuthError(error.code)) })
                 } catch (error) {
@@ -53,8 +74,8 @@ export const useAuthenticationStore = defineStore(AUTHENTICATION_STORE_ID, {
             return new Promise((resolve, reject) => {
                 signOut(firebaseAuth)
                 .then(() => {
-                    this.isSignedIn = false;
-                    resolve(true);
+                    this.clearUser();
+                    resolve(false);
                 })
                 .catch((error) => { reject(getAuthError(error.code)) })
             })
@@ -63,45 +84,34 @@ export const useAuthenticationStore = defineStore(AUTHENTICATION_STORE_ID, {
 });
 
 
-async function signInWithBackend(external_id: string, email: string) : Promise<boolean> {
+export async function signInWithBackend(external_id: string, email: string) : Promise<UserData> {
     return new Promise((resolve, reject) => {
-        resolve(true)
+        firebaseAuth.currentUser?.getIdToken(true)
+            .then((async (token) => {
+                // Token exists
+                await signInUserFromExternalAuthentication(external_id, email, token)
+                    .then((userData) => { resolve(userData as UserData); })
+                    .catch((error) => reject(getAuthError(error.code)))
+            }))
+            .catch((error) => { reject(getAuthError(error.code)); })
     })
-    // try {
-    //     await firebaseAuth?.currentUser?.getIdToken(true)
-    //     .then(async (token) => {
-    //         await signInUserFromExternalAuthentication("external_id", email, token)
-    //         .then((results) => {
-    //             console.log("signed in backend?", results);
-    //             return true;
-    //         })
-    //         .catch((error) => {
-    //             console.log("ERROR", error);
-    //             throw error;
-    //         })
-    //     })
-    //     .catch((err) => {
-    //         throw err;
-    //     })
-    //     return true;
-    // } catch (error) {
-    //     return false;
-    // }
 }
 
 // Types
 type AuthenticationState = {
     // auth: Auth;
     isSignedIn: boolean;
-    user: User;
+    user: UserData
+    // user: User;
 }
 
-type User = {
+export type UserData = {
     id: string,
-    external_id: string,
-    email: string;
-    phone_number: string;
-    firstname: string;
-    lastname: string;
+    // external_id: string,
+    // email: string;
+    // phone_number: string;
+    // firstname: string;
+    // lastname: string;
     registered_at: DateTime;
+    roles: string[]
 } | undefined;

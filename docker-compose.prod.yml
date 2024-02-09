@@ -1,0 +1,91 @@
+version: "3.8"
+
+services:
+  client:
+    container_name: spsk-client
+    image: spsk-client-prod:1.0.0
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "9000:8765" # 8080 HAS WORKED
+    restart: unless-stopped
+    networks:
+      - spsk-shared-network
+    environment:
+      - VITE_SERVER_BASE_URL=http://localhost:8090
+      # Firebase configuration
+      - VITE_FIREBASE_APIKEY="AIzaSyAxnpe6UdBRhoqIyuHWJNb0uAAhkcbmrzA"
+      - VITE_FIREBASE_AUTHDOMAIN="spsk-vue-typescript.firebaseapp.com"
+      - VITE_FIREBASE_PROJECT_ID="spsk-vue-typescript"
+      - VITE_FIREBASE_STORAGE_BUCKET="spsk-vue-typescript.appspot.com"
+      - VITE_FIREBASE_MESSAGING_SENDER_ID="320594821227"
+      - VITE_FIREBASE_APP_ID="1:320594821227:web:1e57774c1bf180d081712e"
+
+  postgres:
+    container_name: spsk-db
+    image: postgres:16.1
+    # restart: unless-stopped # always
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=spsk_dev
+    ports:
+      - 8080:5432
+    networks:
+      - spsk-shared-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  # server:
+  #   container_name: spsk-server
+  #   # restart: unless-stopped
+  #   image: spsk-server-prod:1.0.0
+  #   build:
+  #     context: server
+  #     target: production
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 8090:5000
+  #   networks:
+  #     - spsk-shared-network
+  #   depends_on:
+  #     - postgres
+  #   environment:
+  #     - NODE_ENV=development
+  #     - SERVER_PORT=5000
+  #     # Connection to database 
+  #     - PG_USER=postgres
+  #     - PG_PASSWORD=postgres
+  #     - PG_HOST=postgres # Postgres docker service name
+  #     - PG_PORT=5432 # 8080?
+  #     - PG_DATABASE=spsk_dev
+  #     # Firebase configuration
+  #     # Base64 encoded service_account key
+  #     - FIREBASE_SERVICE_ACCOUNT_KEY="***CHECK_ENV_FILE***"
+
+
+# OLD
+  # client:
+  #   tty: true
+  #   container_name: spsk-client
+  #   # restart: unless-stopped
+  #   image: spsk-client-prod:1.0.0
+  #   build:
+  #     context: client
+  #     target: build-stage
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 9000:80  # 5050:15432 # 5173
+  #   networks:
+  #     - spsk-shared-network
+  #   # depends_on:
+  #   #   - server
+
+
+  
+
+networks:
+  spsk-shared-network:
+
+volumes:
+  postgres-data:

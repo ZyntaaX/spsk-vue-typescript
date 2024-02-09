@@ -28,6 +28,7 @@ const firebaseApp = initializeApp({
 });
 
 const firebaseAuth = getAuth(firebaseApp);
+    
 
 
 interface ErrorMessageMap {
@@ -35,7 +36,8 @@ interface ErrorMessageMap {
 }
 
 const errorMessages: ErrorMessageMap = {
-    "auth/invalid-credential": i18n.global.t('error_messages.auth_invalid_credentials')
+    "auth/invalid-credential": i18n.global.t('error_messages.auth_invalid_credentials'),
+    "auth/custom-server-failed-authorization": i18n.global.t('error_messages.auth_server_failed_auth'),
 }
 
 function getAuthError(errorCode: string) : string {

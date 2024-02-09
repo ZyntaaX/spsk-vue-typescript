@@ -18,17 +18,21 @@ import admin from 'firebase-admin';
 
 // const firebaseAuth = getAuth(firebaseApp);
 
-const serviceAccount = require(process.env.FIREBASE_CONFIG?.toString() ?? "")
-// console.log("SERVICE ACCOUNT: ", serviceAccount);
+if (process.env.NODE_ENV === 'development') {
 
-const op = {
-    credential: admin.credential.cert(serviceAccount)
+    // const serviceAccount = require(process.env.FIREBASE_CONFIG?.toString() ?? "")
+    const serviceAccount = JSON.parse(Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_KEY ?? "", 'base64').toString('binary'))
+    // console.log(serviceAccount);
+    
+
+    const op = {
+        credential: admin.credential.cert(serviceAccount)
+    }
+    
+    admin.initializeApp(op);
+} else {
+    // TODO: Figure this out
 }
-
-
-admin.initializeApp(op);
-
-console.log(admin.auth().listUsers())
 
 export {
     admin as firebaseAdmin
