@@ -36,18 +36,18 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
-  # server:
-  #   container_name: spsk-server
-  #   # restart: unless-stopped
-  #   image: spsk-server-prod:1.0.0
-  #   build:
-  #     context: server
-  #     target: production
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 8090:5000
-  #   networks:
-  #     - spsk-shared-network
+  server:
+    container_name: spsk-server
+    restart: unless-stopped
+    image: spsk-server-prod:1.0.0
+    build:
+      context: server
+      # target: base
+      dockerfile: Dockerfile
+    ports:
+      - 8090:3000
+    networks:
+      - spsk-shared-network
   #   depends_on:
   #     - postgres
   #   environment:

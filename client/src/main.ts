@@ -12,12 +12,21 @@ import { firebaseAuth } from './services/authentication/firebase-client';
 
 import { signInWithBackend } from '@/shared/stores/authentication-store';
 
+// import { config } from 'dotenv';
+
 library.add(faBars, faXmark)
 
 import i18n from "./i18n/i18n"
 
 import App from './App.vue'
 import router from './router'
+
+// const env = config({ path: '../.env' }); // .env file
+// if(env.error) {
+//     console.log("ERROR");
+    
+// }
+
 
 // import { LOCALSTORAGE_VAR } from './components/theme-switcher/theme-store';
 // const scheme = localStorage.getItem(LOCALSTORAGE_VAR)?.toLowerCase();

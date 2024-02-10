@@ -12,6 +12,9 @@ importers:
 
   .:
     dependencies:
+      '@nestjs/common':
+        specifier: ^10.0.0
+        version: 10.3.2(reflect-metadata@0.2.1)(rxjs@7.8.1)
       postinstall:
         specifier: ^0.9.0
         version: 0.9.0
@@ -22,6 +25,9 @@ importers:
         specifier: ^5.0.12
         version: 5.1.1(@types/node@20.11.17)(sass@1.70.0)
     devDependencies:
+      '@nestjs/cli':
+        specifier: ^10.0.0
+        version: 10.3.2
       concurrently:
         specifier: ^8.2.2
         version: 8.2.2
@@ -110,6 +116,12 @@ importers:
       '@vue/tsconfig':
         specifier: ^0.5.1
         version: 0.5.1
+      dotenv:
+        specifier: ^16.4.1
+        version: 16.4.1
+      dotenv-expand:
+        specifier: ^10.0.0
+        version: 10.0.0
       eslint:
         specifier: ^8.49.0
         version: 8.56.0
@@ -130,7 +142,7 @@ importers:
         version: 1.70.0
       sass-loader:
         specifier: ^14.1.0
-        version: 14.1.0(sass@1.70.0)
+        version: 14.1.0(sass@1.70.0)(webpack@5.90.1)
       typescript:
         specifier: ~5.3.0
         version: 5.3.3
@@ -189,6 +201,9 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^6.0.0
         version: 6.21.0(eslint@8.56.0)(typescript@5.3.3)
+      dotenv:
+        specifier: ^16.4.1
+        version: 16.4.1
       eslint:
         specifier: ^8.42.0
         version: 8.56.0
@@ -3823,6 +3838,16 @@ packages:
       esutils: 2.0.3
     dev: true
 
+  /dotenv-expand@10.0.0:
+    resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
+    engines: {node: '>=12'}
+    dev: true
+
+  /dotenv@16.4.1:
+    resolution: {integrity: sha512-CjA3y+Dr3FyFDOAMnxZEGtnW9KBR2M0JvvUtXNW+dYJL5ROWxP9DUHCwgFqpMk0OXCc0ljhaNTr2w/kutYIcHQ==}
+    engines: {node: '>=12'}
+    dev: true
+
   /duplexer@0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
     dev: false
@@ -6895,7 +6920,7 @@ packages:
   /safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
-  /sass-loader@14.1.0(sass@1.70.0):
+  /sass-loader@14.1.0(sass@1.70.0)(webpack@5.90.1):
     resolution: {integrity: sha512-LS2mLeFWA+orYxHNu+O18Xe4jR0kyamNOOUsE3NyBP4DvIL+8stHpNX0arYTItdPe80kluIiJ7Wfe/9iHSRO0Q==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
@@ -6918,6 +6943,7 @@ packages:
     dependencies:
       neo-async: 2.6.2
       sass: 1.70.0
+      webpack: 5.90.1
     dev: true
 
   /sass@1.70.0:

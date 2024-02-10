@@ -8,6 +8,9 @@ import i18n from '@/i18n/i18n';
 // import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 import { getAuth, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth';
 
+// import { loadEnv } from 'vite';
+
+
 // Your web app's Firebase configuration
 // const firebaseConfig = {
 //     apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
@@ -17,6 +20,13 @@ import { getAuth, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } 
 //     messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
 //     appId: import.meta.env.VITE_FIREBASE_APP_ID
 // };
+
+// config();
+// console.log(process.env.VITE_FIREBASE_AUTHDOMAIN);
+
+
+// console.log(process.env.VITE_FIREBASE_APIKEY);
+// console.log(import.meta.env.VITE_FIREBASE_APIKEY);
 
 const firebaseApp = initializeApp({
     apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
