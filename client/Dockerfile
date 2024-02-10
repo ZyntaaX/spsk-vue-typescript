@@ -26,7 +26,6 @@
 # TODO: - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 # Use an official Node.js runtime as the base image
-# FROM node:14-alpine AS build
 FROM node:lts-alpine as build-stage
 
 # Set the working directory in the container
