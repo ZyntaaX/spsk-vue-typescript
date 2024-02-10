@@ -1,0 +1,7 @@
+packages:
+  # Include packages in subfolders
+  - "server/**"
+  - "client/**"
+
+  # Exclude packages in directories if required
+  - '!**/test/**'

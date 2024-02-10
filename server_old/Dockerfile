@@ -5,13 +5,13 @@ ENV NODE_ENV=production
 WORKDIR /spsk/server
 
 COPY package.json .
-COPY yarn.lock .
+COPY pnpm-lock.yaml .
 
-RUN yarn
+RUN pnpm
 
 # Copy entire server
 COPY . .
 
-RUN yarn build
+RUN pnpm build
 
-CMD ["sh", "-c", "yarn start:production", "--experimental-modules"]
+CMD ["sh", "-c", "pnpm start:production", "--experimental-modules"]
