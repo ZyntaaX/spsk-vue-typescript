@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// When making changes to the prisma schema, we need to update our database.
+// Do this by running the command "pnpm postgres:migrate".
+// This will automatically regenerate the Prisma client.
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["user", "forum"]
+}
+
+model User {
+  id            String@db.Uuid              @id @default(dbgenerated("gen_random_uuid()"))
+
+  // External ID is the ID connecting a user to an external
+  // authentication service, for example Firebase
+  external_id   String                      @unique
+
+  email         String                      @unique
+  phone_number  String
+
+  first_name    String        
+  last_name     String
+
+  created_at    DateTime@db.Timestamptz     @default(now()) 
+  last_login    DateTime?@db.Timestamptz
+
+  role          UserRole                    @relation(fields: [role_id], references: [id])
+  role_id       String@db.Uuid      
+  
+  enabled       Boolean                     @default(true)
+
+  // Opposite relations
+  posts         Post[]
+  comments      PostComment[]
+
+  @@schema("user")
+}
+
+model UserRole {
+  id            String@db.Uuid              @id @default(dbgenerated("gen_random_uuid()"))
+  title         String
+
+  news_w        Boolean                     @default(false)
+  user_w        Boolean                     @default(false)
+  calendar_w    Boolean                     @default(false)
+  calendar_r    Boolean                     @default(false)
+
+  // Opposite relations
+  users         User[]
+  
+  @@schema("user")
+}
+
+model Post {
+  id            String@db.Uuid              @id @default(dbgenerated("gen_random_uuid()"))
+  
+  title         String            
+  content       String      
+
+  posted_at     DateTime@db.Timestamptz     @default(now())
+  updated_at    DateTime?@db.Timestamptz    
+  
+  active        Boolean                     @default(true)
+  hide          Boolean                     @default(false)
+
+  author        User                        @relation(fields: [author_id], references: [id])
+  author_id     String@db.Uuid     
+  category      PostCategory                @relation(fields: [category_id], references: [id])
+  category_id   String@db.Uuid        
+
+  // Opposite relations
+  comments      PostComment[]
+
+  @@schema("forum")
+}
+
+model PostCategory {
+  id            String@db.Uuid            @id @default(dbgenerated("gen_random_uuid()"))
+  name          String     
+
+  // Opposite relations           
+  posts         Post[]    
+
+  @@schema("forum")
+}
+
+model PostComment {
+  id            String@db.Uuid            @id @default(dbgenerated("gen_random_uuid()"))
+
+  posted_at     DateTime@db.Timestamptz   @default(now())
+  updated_at    DateTime?@db.Timestamptz   
+
+  post          Post                      @relation(fields: [post_id], references: [id])
+  post_id       String@db.Uuid      
+
+  author        User                      @relation(fields: [author_id], references: [id])
+  author_id     String@db.Uuid          
+
+  @@schema("forum")
+}

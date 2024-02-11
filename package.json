@@ -5,6 +5,7 @@
         "preinstall": "npx only-allow pnpm",
         "start": "concurrently \"pnpm --prefix server start:dev\" \"pnpm --prefix client dev\" --names \"server,client\" --prefix-colors \"magenta,green\"",
         "build": "tsc -b .",
+        "db-migrate": "pnpm --prefix server postgres:migrate",
         "clear-db": "rm -rf postgres-db",
         "clear-node-modules": "npx npkill",
         "clear-project": "rm -rf ./**/dist && pnpm clear-node-modules",

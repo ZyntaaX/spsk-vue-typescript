@@ -1,9 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { config } from 'dotenv';
+// import { config } from 'dotenv';
 // import path from 'path';
 
-config(/* { path: path.resolve(__dirname, '../.env') } */);
+// config(/* { path: path.resolve(__dirname, '../.env') } */);
+// console.log(process.env.DATABASE_URL);
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // Init firebase admin SDK & run DB migration
