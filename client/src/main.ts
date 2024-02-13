@@ -10,7 +10,7 @@ import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useAuthenticationStore } from '@/shared/stores/authentication-store';
 import { firebaseAuth } from './services/authentication/firebase-client';
 
-import { signInWithBackend } from '@/shared/stores/authentication-store';
+// import { signInWithBackend } from '@/shared/stores/authentication-store';
 
 // import { config } from 'dotenv';
 
@@ -48,10 +48,11 @@ themeStore.setInitialTheme();
 
 firebaseAuth.onAuthStateChanged(function(user) {
     if (user) {
+        authStore.isSignedIn = true
         // User is signed in, sign in via our backend aswell.
-        signInWithBackend(user.uid, user.email ?? "")
-        .then((userData) => { authStore.setUser(userData) })
-        .catch(() => { authStore.clearUser() })
+        // signInWithBackend(user.uid, user.email ?? "")
+        // .then((userData) => { authStore.setUser(userData) })
+        // .catch(() => { authStore.clearUser() })
     } else {
         // No user is signed in.
         authStore.clearUser();

@@ -6,7 +6,7 @@ import i18n from '@/i18n/i18n';
 
 // import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 // import { getStorage, ref, getDownloadURL } from 'firebase/storage';
-import { getAuth, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, sendEmailVerification } from 'firebase/auth';
 
 // import { loadEnv } from 'vite';
 
@@ -48,6 +48,7 @@ interface ErrorMessageMap {
 const errorMessages: ErrorMessageMap = {
     "auth/invalid-credential": i18n.global.t('error_messages.auth_invalid_credentials'),
     "auth/custom-server-failed-authorization": i18n.global.t('error_messages.auth_server_failed_auth'),
+    "auth/user-disabled": i18n.global.t('error_messages.auth_account_disabled')
 }
 
 function getAuthError(errorCode: string) : string {
@@ -62,6 +63,7 @@ export {
     signInWithEmailAndPassword,
     signOut,
     sendPasswordResetEmail,
+    sendEmailVerification,
     // type Auth
     firebaseAuth,
     getAuthError

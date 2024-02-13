@@ -1,21 +1,23 @@
 import { Module } from '@nestjs/common';
 import { PrismaModule } from './prisma/prisma.module';
-import { FirebaseModule } from './firebase/firebase.module';
-import { UserModule } from './user/user.module';
-import { UserRoleModule } from './user-role/user.role.module';
-import { PostCommentModule } from './post-comments/post.comment.module';
+import { UserModule } from './routes/user/user.module';
+import { UserRoleModule } from './routes/user-role/user.role.module';
+import { PostCommentModule } from './routes/post-comments/post.comment.module';
 import { ConfigModule } from '@nestjs/config';
+import { FirebaseModule } from './firebase/firebase.module';
+import { AuthModule } from './routes/auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '../.env', cache: true }),
+    // Global Modules
     PrismaModule,
     FirebaseModule,
+    // - - - - - - -
+    AuthModule,
     UserModule,
     UserRoleModule,
     PostCommentModule,
   ],
-  // controllers: [/*AppController,*/ CatsController, UserController],
-  // providers: [PrismaService, AppService, UserService],
 })
 export class AppModule {}

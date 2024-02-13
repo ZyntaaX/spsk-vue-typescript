@@ -86,7 +86,7 @@ const router = createRouter({
 })
 
 import { firebaseAuth } from '@/services/authentication/firebase-client';
-import { signInWithBackend } from '@/shared/stores/authentication-store';
+// import { signInWithBackend } from '@/shared/stores/authentication-store';
 import { useRouterStore } from './router-store';
 
 // import { useAuthenticationStore } from '@/shared/stores/authentication-store'
@@ -94,9 +94,7 @@ import { useRouterStore } from './router-store';
 router.beforeEach(async (to, _from, next) => {
   const routerStore = useRouterStore();
   const authStore = useAuthenticationStore();
-  if (to.meta.requiresAuth) {
-    console.log("WE GET HERE FROM: ", _from.name);
-    
+  if (to.meta.requiresAuth) {    
     if (firebaseAuth.currentUser && authStore.isUserSignedIn) {
       // TODO: Do we really need to check backend aswell?
       // await signInWithBackend(firebaseAuth.currentUser.uid, firebaseAuth.currentUser.email ?? "")

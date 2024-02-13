@@ -1,15 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { Inject, Injectable } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
 import { User, Prisma } from '@prisma/client';
+import * as admin from 'firebase-admin';
+import { FIREBASE_ADMIN } from '../../firebase/firebase.module';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @Inject(FIREBASE_ADMIN) private readonly firebaseAdmin: admin.app.App,
+    private prisma: PrismaService,
+  ) {}
 
   async user(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
   ): Promise<User | null> {
-    this.prisma.userRole.create({ data: { title: 'Developer' } });
     return this.prisma.user.findUnique({
       where: userWhereUniqueInput,
     });
@@ -32,15 +36,9 @@ export class UserService {
     });
   }
 
-  /** TODO: WORKS? */
-  private async createUser(params: {
-    where: Prisma.UserWhereUniqueInput;
-    data: Prisma.UserUpdateInput;
-  }): Promise<User> {
-    const { where, data } = params;
-    return this.prisma.user.update({
+  async createUser(data: Prisma.UserCreateInput): Promise<User> {
+    return this.prisma.user.create({
       data,
-      where,
     });
   }
 

@@ -87,7 +87,6 @@ async function signOut() {
       
       <div class="nav--wrapper">
         <nav>
-          
           <NavigationItem route="/" :title="$t('headers.home')" />
           <NavigationItem route="/sponsors" :title="$t('headers.sponsors')" />
           <NavigationItem route="/about" :title="$t('headers.about_us')" />

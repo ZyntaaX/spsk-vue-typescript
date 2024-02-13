@@ -24,16 +24,16 @@ model User {
   external_id   String                      @unique
 
   email         String                      @unique
-  phone_number  String
+  phone_number  String?
 
-  first_name    String        
-  last_name     String
+  firstname     String        
+  lastname      String
 
   created_at    DateTime@db.Timestamptz     @default(now()) 
   last_login    DateTime?@db.Timestamptz
 
-  role          UserRole                    @relation(fields: [role_id], references: [id])
-  role_id       String@db.Uuid      
+  role          UserRole?                    @relation(fields: [role_id], references: [id])
+  role_id       String?@db.Uuid      
   
   enabled       Boolean                     @default(true)
 

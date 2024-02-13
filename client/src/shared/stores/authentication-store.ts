@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
-import { firebaseApp, firebaseAuth, signInWithEmailAndPassword, signOut, getAuthError } from '../../services/authentication/firebase-client'
+import { firebaseApp, firebaseAuth, signInWithEmailAndPassword, signOut, getAuthError, sendEmailVerification } from '../../services/authentication/firebase-client'
 import { DateTime } from 'luxon';
-import { signInUserFromExternalAuthentication } from '../../services/user'
+// import { signInUserFromExternalAuthentication } from '../../services/user'
+import { getUserTest } from '@/services/user';
 import { computed } from 'vue';
 
 // const firebaseAuth = getAuth(firebaseApp);
@@ -38,36 +39,34 @@ export const useAuthenticationStore = defineStore(AUTHENTICATION_STORE_ID, {
 
         },
         async signIn(email: string, password: string) : Promise<boolean> {
+            // console.log("HERE???????????????????????");
+            
             return new Promise((resolve, reject) => {
-                try {
-                    signInWithEmailAndPassword(firebaseAuth, email, password)
-                        .then(async (results) => {
-                            // User signed in via Firebase, try our server aswell
-                            await signInWithBackend(results.user.uid, email)
-                                .then((userData: UserData) => {
-                                    if (userData) {
-                                        // Successfully logged in
-                                        this.setUser(userData)
-                                        resolve(true);
-                                    } else {
-                                        // Failed, log out from firebase
-                                        signOut(firebaseAuth)
-                                            .then(() => { reject(getAuthError("auth/custom-server-failed-authorization")) })
-                                            .catch((error) => { reject(error) })
-                                    }
-                                })
-                                .catch((error) => {
-                                    // Failed, log out from firebase
-                                    signOut(firebaseAuth)
-                                        .then(() => { reject(getAuthError("auth/custom-server-failed-authorization")) })
-                                        .catch((error) => { reject(error) })
-                                    reject(error)
-                                })
-                        })
-                        .catch((error) => { reject(getAuthError(error.code)) })
-                } catch (error) {
-                    reject(error)
-                }
+                // console.log("HERE???????????????????????2");
+                signInWithEmailAndPassword(firebaseAuth, email, password)
+                    .then(async (results) => {
+
+                        firebaseAuth.currentUser?.getIdToken()
+                            .then((token) => {
+                                getUserTest(token, results.user.uid, email)
+                                    .then((user) => {
+                                        // console.log("GOT USER: ", user);
+                                        resolve(true)
+                                    })
+                                    .catch((error) => {
+                                        // console.log("ERROR: ", error);
+
+                                        sendEmailVerification(firebaseAuth.currentUser!)
+
+                                        this.signOut();
+                                        reject(error)
+                                    })
+                            })
+
+                        // console.log("HERE???????????????????????33333");
+                    })
+                    .catch((error) => { console.log(error);
+                     reject(getAuthError(error.code)) })
             })
         },
         async signOut() : Promise<boolean> {
@@ -84,18 +83,18 @@ export const useAuthenticationStore = defineStore(AUTHENTICATION_STORE_ID, {
 });
 
 
-export async function signInWithBackend(external_id: string, email: string) : Promise<UserData> {
-    return new Promise((resolve, reject) => {
-        firebaseAuth.currentUser?.getIdToken(true)
-            .then((async (token) => {
-                // Token exists
-                await signInUserFromExternalAuthentication(external_id, email, token)
-                    .then((userData) => { resolve(userData as UserData); })
-                    .catch((error) => reject(getAuthError(error.code)))
-            }))
-            .catch((error) => { reject(getAuthError(error.code)); })
-    })
-}
+// export async function signInWithBackend(external_id: string, email: string) : Promise<UserData> {
+//     return new Promise((resolve, reject) => {
+//         firebaseAuth.currentUser?.getIdToken(true)
+//             .then((async (token) => {
+//                 // Token exists
+//                 // await signInUserFromExternalAuthentication(external_id, email, token)
+//                 //     .then((userData) => { resolve(userData as UserData); })
+//                 //     .catch((error) => reject(getAuthError(error.code)))
+//             }))
+//             .catch((error) => { reject(getAuthError(error.code)); })
+//     })
+// }
 
 // Types
 type AuthenticationState = {

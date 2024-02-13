@@ -9,12 +9,12 @@ CREATE TABLE "user"."User" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "external_id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "phone_number" TEXT NOT NULL,
-    "first_name" TEXT NOT NULL,
-    "last_name" TEXT NOT NULL,
+    "phone_number" TEXT,
+    "firstname" TEXT NOT NULL,
+    "lastname" TEXT NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "last_login" TIMESTAMPTZ,
-    "role_id" UUID NOT NULL,
+    "role_id" UUID,
     "enabled" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -73,7 +73,7 @@ CREATE UNIQUE INDEX "User_external_id_key" ON "user"."User"("external_id");
 CREATE UNIQUE INDEX "User_email_key" ON "user"."User"("email");
 
 -- AddForeignKey
-ALTER TABLE "user"."User" ADD CONSTRAINT "User_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "user"."UserRole"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "user"."User" ADD CONSTRAINT "User_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "user"."UserRole"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "forum"."Post" ADD CONSTRAINT "Post_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "user"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

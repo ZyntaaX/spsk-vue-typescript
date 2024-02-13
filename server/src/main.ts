@@ -7,7 +7,10 @@ import { AppModule } from './app.module';
 // console.log(process.env.DATABASE_URL);
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: true,
+    abortOnError: false,
+  });
   // Init firebase admin SDK & run DB migration
   await app.listen(process.env.SERVER_PORT ?? 3000);
   console.log(`Server listening on port ${process.env.SERVER_PORT ?? 3000}...`);
