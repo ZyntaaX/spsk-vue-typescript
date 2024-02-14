@@ -76,7 +76,12 @@ async function signOut() {
         </div>
         <div style="flex-grow: 1;" />
         <div class="actions-wrapper">
-          <ButtonElement v-if="authStore.isUserSignedIn" variant="ERROR" @click="$router.push({ name: 'BugReport' })">Report a problem</ButtonElement>
+          <ButtonElement v-if="authStore.isUserSignedIn" variant="ERROR" @click="$router.push({ name: 'BugReport' })">
+            <div>
+              Report a problem
+              <font-awesome-icon icon="fa-solid fa-bug" />
+            </div>
+          </ButtonElement>
           <ButtonElement v-if="!authStore.isUserSignedIn" @click="router.push({ name: 'LoginPage' })" class="bottom">{{ $t('headers.signin') }}</ButtonElement>
           <div class="burger-menu-button" @click="toggleExtendedMenu(!showExtendedMenu)">
             <font-awesome-icon icon="fa-solid fa-bars" />
@@ -96,10 +101,6 @@ async function signOut() {
             <!-- <NavigationItem v-if="!authStore.isUserSignedIn" route="/login" :title="$t('headers.signin')" /> -->
           </div>
         </nav>
-        <!-- <div class="burger-menu-button" @click="toggleExtendedMenu(true)">
-          <font-awesome-icon icon="fa-solid fa-bars" />
-          <h4>{{ $t('headers.menu') }}</h4>
-        </div> -->
       </div>
     </header>
     
@@ -111,9 +112,39 @@ async function signOut() {
       <div class="footer">hej</div>
     </footer>
   </div>
+
+  <!-- <div class="cookie-accept-box" v-if="showCookieWindow">
+    <p>To get the best experience, you need to let your browser eat som cookies. </p>
+    <p>Click "I Accept" below to let it!</p>
+    <div style="display: flex; padding: 1rem 0; margin: auto 0; width: 100%; justify-content: space-evenly;">
+      <ButtonElement>I Accept</ButtonElement>
+      <ButtonElement variant="ERROR">Reject</ButtonElement>
+    </div>
+  </div> -->
 </template>
 
 <style lang="scss" scoped>
+
+// .cookie-accept-box {
+//   position: absolute;
+//   bottom: 20px;
+//   left: calc(50% - 350px);
+//   width: 700px;
+//   // height: 100px;
+//   background-color: white;
+//   border: 1px solid var(--color-border);
+//   border-radius: 3px;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-between;
+
+//   p {
+//     padding: 1rem 0;
+//     font-weight: bold;
+//     text-align: center;
+
+//   }
+// }
 
 #app {
   overflow: hidden;

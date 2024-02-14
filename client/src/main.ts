@@ -1,38 +1,18 @@
 import './assets/main.scss'
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
-
+import { faBars, faXmark, faBug, faTerminal } from '@fortawesome/free-solid-svg-icons';
 import { useAuthenticationStore } from '@/shared/stores/authentication-store';
 import { firebaseAuth } from './services/authentication/firebase-client';
-
-// import { signInWithBackend } from '@/shared/stores/authentication-store';
-
-// import { config } from 'dotenv';
-
-library.add(faBars, faXmark)
-
+import { authenticateUserOnServer } from './services/user';
 import i18n from "./i18n/i18n"
-
 import App from './App.vue'
 import router from './router'
-
-// const env = config({ path: '../.env' }); // .env file
-// if(env.error) {
-//     console.log("ERROR");
-    
-// }
-
-
-// import { LOCALSTORAGE_VAR } from './components/theme-switcher/theme-store';
-// const scheme = localStorage.getItem(LOCALSTORAGE_VAR)?.toLowerCase();
-// import(`./assets/styles/${scheme ?? 'system_default'}.css`)
-
 import { useThemeStore } from './components/theme-switcher/theme-store';
+
+library.add(faBars, faXmark, faBug, faTerminal)
 
 const app = createApp(App)
 
@@ -46,16 +26,19 @@ const themeStore = useThemeStore();
 
 themeStore.setInitialTheme();
 
-firebaseAuth.onAuthStateChanged(function(user) {
-    if (user) {
-        authStore.isSignedIn = true
-        // User is signed in, sign in via our backend aswell.
-        // signInWithBackend(user.uid, user.email ?? "")
-        // .then((userData) => { authStore.setUser(userData) })
-        // .catch(() => { authStore.clearUser() })
-    } else {
-        // No user is signed in.
-        authStore.clearUser();
+firebaseAuth.onAuthStateChanged(async function(user) {
+    try {
+        if (user) {
+            // User is signed in, sign in via our backend aswell.
+            const token = await firebaseAuth.currentUser?.getIdToken(true);
+            const clientUserModel = await authenticateUserOnServer(token!, user.uid, user.email ?? "")
+            authStore.setUser(clientUserModel);
+        } else {
+            // No user is signed in.
+            authStore.clearUser();
+        }
+    } catch (error: any) {
+        throw error?.code ?? error?.error ?? error;
     }
 });
 

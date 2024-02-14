@@ -10,6 +10,7 @@
             <p class="error-message" style="height: 2rem;">{{ errorMessage ?? "" }}</p>
 
             <ButtonElement @click="signIn" :size="'MEDIUM'">Login</ButtonElement>
+
         </ContentWrapper>
         <ContentWrapper v-else class="wrapper">
             <SpinnerElement style="margin: auto 0" />
@@ -27,6 +28,7 @@ import router from '@/router';
 import { useRouterStore } from '@/router/router-store';
 import { onMounted } from 'vue';
 import { firebaseAuth } from '@/services/authentication/firebase-client';
+import { getAuthError } from '@/services/authentication/error.messages';
 
 const authStore = useAuthenticationStore();
 const routerStore = useRouterStore();
@@ -54,15 +56,19 @@ async function signIn() {
     errorMessage.value = ""
     loading.value = true;
     await authStore.signIn(emailRef.value, passwordRef.value)
-        .then(() => {
-            if (routerStore.intendedRoute) {
-                router.push(routerStore.intendedRoute)
+        .then((success) => {
+            if (success) {
+                if (routerStore.intendedRoute) {
+                    router.push(routerStore.intendedRoute)
+                } else {
+                    router.push({ name: "Home" })
+                }
             } else {
-                router.push({ name: "Home" })
+                throw new Error()
             }
         })
         .catch((error) => {
-            errorMessage.value = error;
+            errorMessage.value = getAuthError(error);
         })
         .finally(() => {
             loading.value = false;

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { User, Prisma } from '@prisma/client';
+import { User, Prisma, Claim } from '@prisma/client';
 import * as admin from 'firebase-admin';
 import { FIREBASE_ADMIN } from '../../firebase/firebase.module';
 
@@ -11,11 +11,37 @@ export class UserService {
     private prisma: PrismaService,
   ) {}
 
+  async getClaimsForUser(
+    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
+  ): Promise<Claim[] | []> {
+    const strippedUser = await this.prisma.user.findUnique({
+      where: userWhereUniqueInput,
+      select: { role: { select: { claims: true } } },
+    });
+
+    if (strippedUser && strippedUser.role) {
+      const { claims } = strippedUser.role;
+      return claims ?? [];
+    } else {
+      return [];
+    }
+  }
+
   async user(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
   ): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: userWhereUniqueInput,
+      relationLoadStrategy: 'join', // or 'query'
+      include: {
+        role: {
+          include: {
+            claims: true,
+          },
+        },
+        posts: true,
+        comments: true,
+      },
     });
   }
 
@@ -50,6 +76,15 @@ export class UserService {
     return this.prisma.user.update({
       data,
       where,
+      include: {
+        role: {
+          include: {
+            claims: true,
+          },
+        },
+        posts: true,
+        comments: true,
+      },
     });
   }
 

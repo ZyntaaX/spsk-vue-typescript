@@ -1,20 +1,18 @@
 import { defineStore } from 'pinia';
-import { firebaseApp, firebaseAuth, signInWithEmailAndPassword, signOut, getAuthError, sendEmailVerification } from '../../services/authentication/firebase-client'
-import { DateTime } from 'luxon';
-// import { signInUserFromExternalAuthentication } from '../../services/user'
-import { getUserTest } from '@/services/user';
-import { computed } from 'vue';
+import { firebaseApp, firebaseAuth, sendEmailVerification, signInWithEmailAndPassword, signOut } from '../../services/authentication/firebase-client'
+import { authenticateUserOnServer } from '@/services/user';
+import type { UserModel } from '@/services/user/dto/user.dto';
+import * as CookieService from '@/services/cookies/cookies.service';
 
-// const firebaseAuth = getAuth(firebaseApp);
-
-const LOCALSTORAGE_KEY_AUTH_STORES_STATE = "AUTH:STORED:STATE";
+const COOKIE_USER_ID_KEY = 'KEY:COOKIE:USER_ID';
+const COOKIE_SENT_EMAIL_VERIFICATION = 'KEY:COOKIE:SENT_EMAIL_VERIFICATION';
 
 const AUTHENTICATION_STORE_ID = 'STORE:AUTHENTICATION';
 
 export const useAuthenticationStore = defineStore(AUTHENTICATION_STORE_ID, {
     state: (): AuthenticationState => ({
-        isSignedIn: JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY_AUTH_STORES_STATE) ?? "{}")?.isSignedIn ?? false, // TODO: Start as true to hide login button until firestore state has been fetched
-        user: JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY_AUTH_STORES_STATE) ?? "{}")?.user ?? undefined,
+        isSignedIn: !!CookieService.getCookie(COOKIE_USER_ID_KEY) ?? false,
+        user: undefined,
     }),
 
     getters: {
@@ -24,93 +22,60 @@ export const useAuthenticationStore = defineStore(AUTHENTICATION_STORE_ID, {
     },
 
     actions: {
-        setUser(userData: UserData) : void {
+        setUser(userData: UserModel | null) : void {
             if (userData) {
                 this.isSignedIn = true;
                 this.user = userData;
 
-                localStorage.setItem(LOCALSTORAGE_KEY_AUTH_STORES_STATE, JSON.stringify(this.$state))
+                CookieService.setCookie(COOKIE_USER_ID_KEY, userData.id);
+            } else {
+                this.clearUser()
             }
         },
         clearUser() : void {
-            localStorage.removeItem(LOCALSTORAGE_KEY_AUTH_STORES_STATE)
             this.isSignedIn = false;
             this.user = undefined;
 
+            CookieService.removeCookie(COOKIE_USER_ID_KEY);
         },
         async signIn(email: string, password: string) : Promise<boolean> {
-            // console.log("HERE???????????????????????");
-            
-            return new Promise((resolve, reject) => {
-                // console.log("HERE???????????????????????2");
-                signInWithEmailAndPassword(firebaseAuth, email, password)
-                    .then(async (results) => {
-
-                        firebaseAuth.currentUser?.getIdToken()
-                            .then((token) => {
-                                getUserTest(token, results.user.uid, email)
-                                    .then((user) => {
-                                        // console.log("GOT USER: ", user);
-                                        resolve(true)
-                                    })
-                                    .catch((error) => {
-                                        // console.log("ERROR: ", error);
-
-                                        sendEmailVerification(firebaseAuth.currentUser!)
-
-                                        this.signOut();
-                                        reject(error)
-                                    })
-                            })
-
-                        // console.log("HERE???????????????????????33333");
-                    })
-                    .catch((error) => { console.log(error);
-                     reject(getAuthError(error.code)) })
-            })
+            try {
+                const results = await signInWithEmailAndPassword(firebaseAuth, email, password);
+                const token = await firebaseAuth.currentUser?.getIdToken();
+                const serverResults = await authenticateUserOnServer(token!, results.user.uid, email); 
+                this.setUser(serverResults);
+                
+                return true;
+            } catch (error: any) {
+                if ((error?.code ?? error?.error ?? error) === 'auth/email-not-verified') {
+                    const cookie = CookieService.getCookie(COOKIE_SENT_EMAIL_VERIFICATION) 
+                    console.log(cookie);
+                    
+                    const hasSentCookie =  JSON.parse(CookieService.getCookie(COOKIE_SENT_EMAIL_VERIFICATION) ?? "false");
+                    hasSentCookie.expires
+                    if (firebaseAuth.currentUser && !hasSentCookie) {
+                        sendEmailVerification(firebaseAuth.currentUser)
+                        CookieService.setCookie(COOKIE_SENT_EMAIL_VERIFICATION, true, { expires: 1000 * 60 * 15 /* 15 minutes */ })
+                    }
+                }
+                await this.signOut()
+                throw error?.code ?? error?.error ?? error;
+            }
         },
         async signOut() : Promise<boolean> {
-            return new Promise((resolve, reject) => {
-                signOut(firebaseAuth)
-                .then(() => {
-                    this.clearUser();
-                    resolve(false);
-                })
-                .catch((error) => { reject(getAuthError(error.code)) })
-            })
+            try {
+                await signOut(firebaseAuth)
+                this.clearUser();
+                return true;
+            } catch (error: any) {
+                throw error?.code ?? error?.error ?? error;
+            }
         }
     }
 });
 
-
-// export async function signInWithBackend(external_id: string, email: string) : Promise<UserData> {
-//     return new Promise((resolve, reject) => {
-//         firebaseAuth.currentUser?.getIdToken(true)
-//             .then((async (token) => {
-//                 // Token exists
-//                 // await signInUserFromExternalAuthentication(external_id, email, token)
-//                 //     .then((userData) => { resolve(userData as UserData); })
-//                 //     .catch((error) => reject(getAuthError(error.code)))
-//             }))
-//             .catch((error) => { reject(getAuthError(error.code)); })
-//     })
-// }
-
 // Types
 type AuthenticationState = {
-    // auth: Auth;
     isSignedIn: boolean;
-    user: UserData
-    // user: User;
+    user: UserModel
 }
-
-export type UserData = {
-    id: string,
-    // external_id: string,
-    // email: string;
-    // phone_number: string;
-    // firstname: string;
-    // lastname: string;
-    registered_at: DateTime;
-    roles: string[]
-} | undefined;

@@ -3,7 +3,7 @@ import { User as UserModel } from '@prisma/client';
 import { UserService } from './user.service';
 import { FIREBASE_ADMIN } from 'src/firebase/firebase.module';
 import { app } from 'firebase-admin';
-// import { FirebaseAuth } from 'src/guards/firebase.auth.decorator';
+import { FirebaseAuth } from 'src/guards/auth-guard/firebase.auth.decorator';
 
 @Controller('user')
 export class UserController {
@@ -13,7 +13,7 @@ export class UserController {
   ) {}
 
   @Get(':id')
-  // @FirebaseAuth(true)
+  @FirebaseAuth(true)
   async getUserById(@Param('id') id: string): Promise<UserModel | null> {
     return this.userService.user({ id });
   }

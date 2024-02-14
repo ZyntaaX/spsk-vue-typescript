@@ -5,12 +5,16 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "prisma": "pnpm \"prisma generate\"",
-    "postgres:migrate": "dotenv -e ../.env -- npx prisma migrate dev --name migrate",
+    "prisma:migrate": "dotenv -e ../.env -- npx prisma migrate dev --name migrate",
+    "prisma:seed": "dotenv -e ../.env -- npx prisma db seed",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",

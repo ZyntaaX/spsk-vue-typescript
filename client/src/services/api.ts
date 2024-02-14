@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { firebaseAuth } from './authentication/firebase-client';
+// import { firebaseAuth } from './authentication/firebase-client';
 
 export default (token?: string) => {
     // if (requiresAuth) {

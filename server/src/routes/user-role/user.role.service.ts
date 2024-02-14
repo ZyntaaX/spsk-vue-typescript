@@ -31,14 +31,9 @@ export class UserRoleService {
     });
   }
 
-  async createUserRole(params: {
-    where: Prisma.UserRoleWhereUniqueInput;
-    data: Prisma.UserRoleUpdateInput;
-  }): Promise<UserRole> {
-    const { where, data } = params;
-    return this.prisma.userRole.update({
+  async createUserRole(data: Prisma.UserRoleCreateInput): Promise<UserRole> {
+    return this.prisma.userRole.create({
       data,
-      where,
     });
   }
 

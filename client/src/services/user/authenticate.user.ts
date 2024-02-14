@@ -1,28 +1,14 @@
 import Api from '../api';
-// import { type UserData } from '@/shared/stores/authentication-store';
-// import { firebaseAuth } from '../authentication/firebase-client';
+import { mapUserModel, type UserModel } from './dto/user.dto';
 
 
 
-export async function getUserTest(token: string, external_id: string, email: string) : Promise<boolean | void> {
-    // console.log("EMAIL: ", email);
-    
-    // try {
-        await Api(token).get("/authenticate", { params: { external_id, email } })
-            .then((res) => {
-                console.log("RES: ", res.data);
-                return true;
-            })
-            .catch((err) => {
-                console.log("ERR:", err.response.data);
-                throw err.response.data;
-            })
-            // console.log(data);
-            
-        // Promise.resolve(true)
-    // } catch (error) {
-    //     console.log("ERR: ", error);
-    //     Promise.reject(error);
-    // }
+export async function authenticateUserOnServer(token: string, external_id: string, email: string) : Promise<UserModel | null> {
+    try {
+        const response = await Api(token).get("/authenticate", { params: { external_id, email }});
+        return mapUserModel(response.data)
+    } catch (error: any) {
+        throw error?.response?.data ?? error;
+    }
 }
 

@@ -7,7 +7,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
+  previewFeatures = ["multiSchema", "relationJoins"]
 }
 
 datasource db {
@@ -46,16 +46,25 @@ model User {
 
 model UserRole {
   id            String@db.Uuid              @id @default(dbgenerated("gen_random_uuid()"))
-  title         String
+  title         String                      @unique
+  created_at    DateTime@db.Timestamptz     @default(now())
 
-  news_w        Boolean                     @default(false)
-  user_w        Boolean                     @default(false)
-  calendar_w    Boolean                     @default(false)
-  calendar_r    Boolean                     @default(false)
+  claims        Claim[]
 
   // Opposite relations
   users         User[]
   
+  @@schema("user")
+}
+
+model Claim {
+  id            String@db.Uuid              @id @default(dbgenerated("gen_random_uuid()"))
+  created_at    DateTime@db.Timestamptz     @default(now())
+
+  key           String                      @unique  
+              
+  userRoles     UserRole[]
+
   @@schema("user")
 }
 
@@ -84,7 +93,7 @@ model Post {
 
 model PostCategory {
   id            String@db.Uuid            @id @default(dbgenerated("gen_random_uuid()"))
-  name          String     
+  name          String                    @unique
 
   // Opposite relations           
   posts         Post[]    

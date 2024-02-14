@@ -12,9 +12,11 @@
         "settings": "Settings"
     },
     "error_messages": {
+        "404_page_not_found": "This page could not be found",
         "auth_invalid_credentials": "Email and/or password is incorrect.",
         "auth_generic_message": "An unexpected error occurred. Please try again later.",
         "auth_server_failed_auth": "Server failed to authorize you. If the problem persists, please contact a system administrator.",
-        "auth_account_disabled": "This account has been disabled."
+        "auth_account_disabled": "This account has been disabled.",
+        "auth_email_not_verified": "Your email is not yet verified. Please check your email inbox."
     }
 }

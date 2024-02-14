@@ -24,12 +24,18 @@ CREATE TABLE "user"."User" (
 CREATE TABLE "user"."UserRole" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "title" TEXT NOT NULL,
-    "news_w" BOOLEAN NOT NULL DEFAULT false,
-    "user_w" BOOLEAN NOT NULL DEFAULT false,
-    "calendar_w" BOOLEAN NOT NULL DEFAULT false,
-    "calendar_r" BOOLEAN NOT NULL DEFAULT false,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "UserRole_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "user"."Claim" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "key" TEXT NOT NULL,
+
+    CONSTRAINT "Claim_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -66,11 +72,32 @@ CREATE TABLE "forum"."PostComment" (
     CONSTRAINT "PostComment_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "user"."_ClaimToUserRole" (
+    "A" UUID NOT NULL,
+    "B" UUID NOT NULL
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_external_id_key" ON "user"."User"("external_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "user"."User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UserRole_title_key" ON "user"."UserRole"("title");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Claim_key_key" ON "user"."Claim"("key");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "PostCategory_name_key" ON "forum"."PostCategory"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_ClaimToUserRole_AB_unique" ON "user"."_ClaimToUserRole"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_ClaimToUserRole_B_index" ON "user"."_ClaimToUserRole"("B");
 
 -- AddForeignKey
 ALTER TABLE "user"."User" ADD CONSTRAINT "User_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "user"."UserRole"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -86,3 +113,9 @@ ALTER TABLE "forum"."PostComment" ADD CONSTRAINT "PostComment_post_id_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "forum"."PostComment" ADD CONSTRAINT "PostComment_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "user"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user"."_ClaimToUserRole" ADD CONSTRAINT "_ClaimToUserRole_A_fkey" FOREIGN KEY ("A") REFERENCES "user"."Claim"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user"."_ClaimToUserRole" ADD CONSTRAINT "_ClaimToUserRole_B_fkey" FOREIGN KEY ("B") REFERENCES "user"."UserRole"("id") ON DELETE CASCADE ON UPDATE CASCADE;

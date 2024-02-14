@@ -1,12 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
-import { FirebaseAuthGuard } from '../../guards/firebase.auth.guard';
+// import { FirebaseAuthGuard } from '../../guards/auth-guard/firebase.auth.guard';
 // import { FirebaseModule } from '../../firebase/firebase.module';
 
+@Global()
 @Module({
   controllers: [UserController],
-  providers: [FirebaseAuthGuard, UserService],
+  providers: [UserService],
   exports: [UserService],
   // imports: [FirebaseModule],
 })

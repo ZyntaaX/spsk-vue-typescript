@@ -29,6 +29,8 @@ export class FirebaseAuthGuard implements CanActivate {
     );
 
     if (!token) {
+      console.log('NO TOKEN');
+
       throw new UnauthorizedException();
     }
 
@@ -36,6 +38,8 @@ export class FirebaseAuthGuard implements CanActivate {
       const decodedToken = await this.firebaseAdmin.auth().verifyIdToken(token);
 
       if (requiresVerifiedEmail && !decodedToken?.email_verified) {
+        console.log('NO VERIFIED');
+
         throw new EmailNotVerifiedException();
       }
 

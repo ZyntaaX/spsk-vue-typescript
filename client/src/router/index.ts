@@ -33,8 +33,10 @@ const router = createRouter({
     {
       path: '/user/:userid',
       name: 'UserPage',
-      beforeEnter: userExists,
-      component: UserPageView
+      component: UserPageView,
+      meta: {
+        requiresAuth: true,
+      }
     },
     {
       path: '/sponsors',

@@ -1,26 +1,47 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { User as UserModel } from '@prisma/client';
-// import {  }
+import { DateTime } from 'luxon';
+import { UserRoleService } from '../user-role/user.role.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private userRoleService: UserRoleService,
+  ) {}
 
   async findOrAddUserForDB(
     external_id: string,
     email: string,
   ): Promise<UserModel> {
     const [firstname, lastname] = splitEmail(email);
-    return (
-      (await this.userService.user({ external_id })) ??
-      (await this.userService.createUser({
-        external_id,
-        email,
-        firstname,
-        lastname,
-      }))
-    );
+    const user = await this.userService.user({ external_id });
+    if (user) {
+      return await this.userService.updateUser({
+        where: { id: user.id },
+        data: { last_login: DateTime.now().toISO() },
+      });
+    }
+
+    // let memberRole = await this.userRoleService.userRole({
+    //   title: 'member',
+    // });
+
+    // if (!memberRole) {
+    //   memberRole = await this.userRoleService.createUserRole({
+    //     title: 'member',
+    //   });
+    // }
+
+    return await this.userService.createUser({
+      external_id,
+      email,
+      firstname,
+      lastname,
+      last_login: DateTime.now().toISO(),
+      // role: { connect: { id: memberRole.id } },
+    });
   }
 }
 

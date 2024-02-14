@@ -1,7 +1,6 @@
 <template>
     <div>
         <h5>Home HEJSAN</h5>
-        <h5>{{ authStore.user }}</h5>
     </div>
 </template>
 

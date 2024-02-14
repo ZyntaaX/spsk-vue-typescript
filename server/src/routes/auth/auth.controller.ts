@@ -10,7 +10,7 @@ import { User as UserModel } from '@prisma/client';
 import { app } from 'firebase-admin';
 import { FIREBASE_ADMIN } from '../../firebase/firebase.module';
 import { AuthService } from './auth.service';
-import { FirebaseAuth } from 'src/guards/firebase.auth.decorator';
+import { FirebaseAuth } from 'src/guards/auth-guard/firebase.auth.decorator';
 
 @Controller('authenticate')
 export class AuthController {
