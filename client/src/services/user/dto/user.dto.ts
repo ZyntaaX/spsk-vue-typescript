@@ -9,9 +9,15 @@ export type UserModel = {
     lastname: string;
     created_at: DateTime;
     last_login: DateTime;
-    role: object;
-    posts: [];
-    comments: [];
+    role: {
+        title: string;
+        claims: {
+            key: string;
+        }[];
+    };
+    posts: object[];
+    comments: object[];
+    profile_picture_id: string;
 } | undefined;
 
 export function mapUserModel(apiResponse: any) : UserModel {
@@ -26,7 +32,8 @@ export function mapUserModel(apiResponse: any) : UserModel {
       phone_number,
       posts,
       comments,
-      role
+      role,
+      profile_picture_id
   } = apiResponse;
   return {
       id,
@@ -39,6 +46,7 @@ export function mapUserModel(apiResponse: any) : UserModel {
       phone_number,
       posts,
       comments,
-      role
+      role,
+      profile_picture_id,
   } as UserModel
 }

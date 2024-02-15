@@ -11,6 +11,16 @@ export class UserService {
     private prisma: PrismaService,
   ) {}
 
+  async getUserUuid(
+    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
+  ): Promise<string | undefined> {
+    const user = await this.prisma.user.findUnique({
+      where: userWhereUniqueInput,
+      select: { id: true },
+    });
+    return user?.id;
+  }
+
   async getClaimsForUser(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
   ): Promise<Claim[] | []> {

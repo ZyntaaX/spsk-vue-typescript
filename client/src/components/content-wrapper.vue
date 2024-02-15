@@ -13,6 +13,7 @@
 .content-wrapper {
     background-color: var(--color-main-content-bg);
     padding: 0.5rem;
+    color: var(--color-text);
 }
 
 </style>

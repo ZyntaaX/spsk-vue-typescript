@@ -31,6 +31,8 @@ async function main() {
           { key: 'news_r' },
           { key: 'posts_w' },
           { key: 'posts_r' },
+          { key: 'image_r' },
+          { key: 'image_w' },
         ],
       },
     },

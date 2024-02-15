@@ -18,5 +18,23 @@
         "auth_server_failed_auth": "Server failed to authorize you. If the problem persists, please contact a system administrator.",
         "auth_account_disabled": "This account has been disabled.",
         "auth_email_not_verified": "Your email is not yet verified. Please check your email inbox."
+    },
+    "roles": {
+        "developer": "Developer",
+        "admin": "Admin",
+        "member": "Member"
+    },
+    "misc_texts": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "email": "Email",
+        "phone_number": "Phone number",
+        "last_active": "Last active",
+        "registered_at": "Registered",
+        "contact_information": "Contact information",
+        "about": "About"
+    },
+    "actions": {
+        "write_post": "Write post"
     }
 }

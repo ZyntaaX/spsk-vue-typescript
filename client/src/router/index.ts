@@ -12,6 +12,7 @@ import UserPageView from "@/views/user/user-page-view.vue";
 import BugReportView from "@/views/bug-report/bug-report-view.vue";
 import FourOhFourView from "@/views/404/404-view.vue";
 import SettingsView from '@/views/settings/settings-view.vue';
+import WritePostView from '@/views/write-post/write-post-view.vue';
 
 import { useAuthenticationStore } from '@/shared/stores/authentication-store'
 
@@ -77,6 +78,14 @@ const router = createRouter({
       name: "Settings",
       component: SettingsView,
     },
+    {
+      path: '/post/write',
+      name: 'WritePost',
+      component: WritePostView,
+      meta: {
+        requiresAuth: true,
+      }
+    },
     
     /* This catchAll should always be placed as the last route-check! */
     {
@@ -97,22 +106,9 @@ router.beforeEach(async (to, _from, next) => {
   const routerStore = useRouterStore();
   const authStore = useAuthenticationStore();
   if (to.meta.requiresAuth) {    
-    if (firebaseAuth.currentUser && authStore.isUserSignedIn) {
-      // TODO: Do we really need to check backend aswell?
-      // await signInWithBackend(firebaseAuth.currentUser.uid, firebaseAuth.currentUser.email ?? "")
-      //   .then((result) => {
-      //     if (result) {
-      //       // User authorization successful
-              next();
-          // } else {
-          //   routerStore.setIntendedRoute(to)
-          //   next({ name: "LoginPage" }); 
-          // }
-        // })
-        // .catch(() => {
-        //   next({ name: "LoginPage" }); 
-        // })
-
+    if (await firebaseAuth.currentUser && authStore.isUserSignedIn) {
+      routerStore.clearIntendedRoute();
+      next();
     } else {
       routerStore.setIntendedRoute(to)
       next({ name: "LoginPage" }); 

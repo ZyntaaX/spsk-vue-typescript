@@ -6,6 +6,7 @@ import { PostCommentModule } from './routes/post-comments/post.comment.module';
 import { ConfigModule } from '@nestjs/config';
 import { FirebaseModule } from './firebase/firebase.module';
 import { AuthModule } from './routes/auth/auth.module';
+import { ImageUploadModule } from './routes/image-upload/image.upload.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from './routes/auth/auth.module';
     UserModule,
     UserRoleModule,
     PostCommentModule,
+    ImageUploadModule,
   ],
 })
 export class AppModule {}

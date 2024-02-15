@@ -17,29 +17,45 @@ datasource db {
 }
 
 model User {
-  id            String@db.Uuid              @id @default(dbgenerated("gen_random_uuid()"))
+  id                  String@db.Uuid              @id @default(dbgenerated("gen_random_uuid()"))
 
   // External ID is the ID connecting a user to an external
   // authentication service, for example Firebase
-  external_id   String                      @unique
+  external_id         String                      @unique
 
-  email         String                      @unique
-  phone_number  String?
+  email               String                      @unique
+  phone_number        String?
 
-  firstname     String        
-  lastname      String
+  firstname           String        
+  lastname            String
 
-  created_at    DateTime@db.Timestamptz     @default(now()) 
-  last_login    DateTime?@db.Timestamptz
+  created_at          DateTime@db.Timestamptz     @default(now()) 
+  last_login          DateTime?@db.Timestamptz
 
-  role          UserRole?                    @relation(fields: [role_id], references: [id])
-  role_id       String?@db.Uuid      
+  role                UserRole?                   @relation(fields: [role_id], references: [id])
+  role_id             String?@db.Uuid      
   
-  enabled       Boolean                     @default(true)
+  enabled             Boolean                     @default(true)
 
+  profile_picture_id  String?@db.Uuid        
+  
   // Opposite relations
-  posts         Post[]
-  comments      PostComment[]
+  posts               Post[]
+  comments            PostComment[]
+  image_uploads       ImageUpload[]
+
+  @@schema("user")
+}
+
+model ImageUpload {
+  id            String@db.Uuid              @id @default(dbgenerated("gen_random_uuid()"))
+  filename      String
+  mimetype      String
+  buffer        Bytes
+  uploaded_at   DateTime@db.Timestamptz     @default(now())  
+
+  owner         User                        @relation(fields: [owner_id], references: [id])
+  owner_id      String@db.Uuid
 
   @@schema("user")
 }

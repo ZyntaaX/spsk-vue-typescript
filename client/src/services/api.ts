@@ -15,12 +15,13 @@ export default (token?: string) => {
             //         return Promise.reject(error);
             //     }
             // )
-
+            // const ContentType = contentType ?? undefined;
             return axios.create({
                 baseURL: import.meta.env.VITE_SERVER_BASE_URL,
                 headers: {
-                    'Authorization': token
+                    'Authorization': token,
                 },
+                
                 // withCredentials: false,
                 
             })

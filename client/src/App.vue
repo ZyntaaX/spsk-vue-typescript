@@ -105,7 +105,7 @@ async function signOut() {
     </header>
     
     <div class="main-view--wrapper">
-      <RouterView />
+      <RouterView :key="$route.fullPath" />
     </div>
 
     <footer>
@@ -206,6 +206,7 @@ header {
 
       img {
         height: 70px;
+        width: 78.64px;
         margin: auto 0;
       }
 

@@ -1,5 +1,5 @@
 <template>
-    <button class="button-element" :class="[props.size, props.variant]" @click="emit('click')">
+    <button class="button-element" :disabled="disabled" :class="[props.size, props.variant]" @click="emit('click')">
         <slot />
     </button>
 </template>
@@ -11,6 +11,7 @@ type ButtonSize = 'SMALL' | 'MEDIUM' | 'LARGE';
 interface Props {
     size?: ButtonSize
     variant?: ButtonVariant
+    disabled?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
     size: 'MEDIUM',
@@ -64,6 +65,11 @@ const emit = defineEmits(['click'])
     &.LINKSTYLE {
         background-color: transparent;
         color: var(--color-text);
+        border: none;
+    }
+
+    &:disabled {
+        background-color: var(--color-disabled);
         border: none;
     }
 }

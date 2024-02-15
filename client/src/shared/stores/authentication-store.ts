@@ -19,9 +19,18 @@ export const useAuthenticationStore = defineStore(AUTHENTICATION_STORE_ID, {
         isUserSignedIn: (state) : boolean => {
             return state.isSignedIn;
         },
+        userID: (state): string => {
+            return state.user?.id ?? "";
+        },
     },
 
     actions: {
+        hasUserGotClaim(claimToCheck: string) : boolean {
+            return !!this.user?.role?.claims?.find((claim) => claim.key === claimToCheck || claim.key === 'all')
+        },
+        getCachedUserID(): string {
+            return CookieService.getCookie(COOKIE_USER_ID_KEY) ?? "";
+        },
         setUser(userData: UserModel | null) : void {
             if (userData) {
                 this.isSignedIn = true;

@@ -18,5 +18,23 @@
         "auth_server_failed_auth": "Servern kunde inte verifiera dig. Om problemet kvarstår, kontakta systemadministratör.",
         "auth_account_disabled": "Detta konto har blivit avstängt.",
         "auth_email_not_verified": "Din email är inte verifierad. Kolla in inkorg."
+    },
+    "roles": {
+        "developer": "Utvecklare",
+        "admin": "Administratör",
+        "member": "Medlem"
+    },
+    "misc_texts": {
+        "today": "Idag",
+        "yesterday": "Igår",
+        "email": "Epost",
+        "phone_number": "Telefonnummer",
+        "last_active": "Senast aktiv",
+        "registered_at": "Registrerad",
+        "contact_information": "Kontaktinformation",
+        "about": "Om"
+    },
+    "actions": {
+        "write_post": "Skriv inlägg"
     }
 }
