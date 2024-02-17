@@ -23,6 +23,13 @@ export const useThemeStore = defineStore(THEME_STORE_ID, {
         getCurrentTheme() : Theme {
             const systemDefaultIsDark = window?.matchMedia("(prefers-color-scheme: dark)")?.matches ?? false
             return this.currentTheme; // === 'SYSTEM_DEFAULT' ? systemDefaultIsDark ? 'DARK' : 'LIGHT' : this.currentTheme
+        },
+        getThemeFlat() : Theme {
+            const systemDefaultIsDark = window?.matchMedia("(prefers-color-scheme: dark)")?.matches ?? false
+            if (this.currentTheme === 'SYSTEM_DEFAULT') {
+                return systemDefaultIsDark ? 'DARK' : 'LIGHT';
+            }
+            return this.currentTheme;
         }
     },
 });

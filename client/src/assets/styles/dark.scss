@@ -1,48 +1,19 @@
 [data-theme="CUSTOM-THEME-DARK"] {
-  // &:root {
-    /* --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute); */
+  --color-background: var(--vt-c-black);
+  --color-main-content-bg: var(--vt-c-black-mute);
+  --color-background-accent: rgba(32, 32, 32, 0.493);
 
-    --color-background: var(--vt-c-black);
-    --color-main-content-bg: var(--vt-c-black-mute);
+  --color-border: var(--vt-c-divider-dark-2);
+  --color-border-hover: var(--vt-c-divider-dark-1);
 
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
+  --primary-color: hsla(160, 100%, 37%, 1);
+  --secondary-color: rgb(15, 88, 64);
 
-    --primary-color: hsla(160, 100%, 37%, 1);
-    --secondary-color: rgb(15, 88, 64);
+  --color-heading: var(--vt-c-text-dark-1);
+  --color-text: rgb(170, 170, 170);
+  --button-text-color: rgb(49, 42, 42);
+  --color-disabled: rgb(104, 104, 104);
 
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: rgb(170, 170, 170);
-    --button-text-color: rgb(49, 42, 42);
-    --color-disabled: rgb(104, 104, 104);
-
-    --error-color: rgba(219, 68, 68, 0.863);
-    --error-color-secondary: rgba(133, 40, 40, 0.863);
-  }
-// }
-
-// @media (prefers-color-scheme: dark) {
-  // :root {
-  //   /* --color-background: var(--vt-c-black);
-  //   --color-background-soft: var(--vt-c-black-soft);
-  //   --color-background-mute: var(--vt-c-black-mute); */
-
-  //   --color-background: var(--vt-c-black);
-  //   --color-main-content-bg: var(--vt-c-black-mute);
-
-  //   --color-border: var(--vt-c-divider-dark-2);
-  //   --color-border-hover: var(--vt-c-divider-dark-1);
-
-  //   --primary-color: hsla(160, 100%, 37%, 1);
-  //   --secondary-color: rgb(15, 88, 64);
-
-  //   --color-heading: var(--vt-c-text-dark-1);
-  //   --color-text: rgb(170, 170, 170);
-  //   --button-text-color: rgb(49, 42, 42);
-
-  //   --error-color: rgba(219, 68, 68, 0.863);
-  //   --error-color-secondary: rgba(133, 40, 40, 0.863);
-  // }
-// }
+  --error-color: rgba(219, 68, 68, 0.863);
+  --error-color-secondary: rgba(133, 40, 40, 0.863);
+}

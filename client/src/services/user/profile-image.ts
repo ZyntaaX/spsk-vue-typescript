@@ -25,18 +25,15 @@ export async function uploadUserProfileImage(userID: string, formData: FormData)
 export async function getProfileImage(imageID: string) : Promise<string> {
     try {
         const response = await api().get(`/image-upload/image/${imageID}`, {
-            // headers: {
-                responseType: "arraybuffer"
-            // }
+            responseType: "arraybuffer"
         })
 
-        // console.log(response);
-        
 
         const blob = new Blob([response.data], { type: 'image/jpeg' })
-// console.log(URL.createObjectURL(blob));
 
-        return URL.createObjectURL(blob);
+        const picUrl = URL.createObjectURL(blob);
+
+        return picUrl;
     } catch (error: any) {
         throw error.code ?? error.error ?? error;
     }

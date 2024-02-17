@@ -58,7 +58,7 @@ const model = defineModel();
         width: 25rem;
     }
     &.LARGE {
-        
+        width: 100%;
     }
 }
 

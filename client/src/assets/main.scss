@@ -1,60 +1,32 @@
 @import './styles/base.scss';
-// @import './styles/system_default.scss';
 @import './styles/dark.scss';
 @import './styles/light.scss';
 
 #app {
-  max-height: 100vh;
   max-width: 100vw;
-  height: 100vh;
   background-color: var(--color-background);
-
 }
 
-// [data-theme="CUSTOM-THEME-DARK"] {
-//   --color-background: red;
-// }
-
-// [data-theme="CUSTOM-THEME-LIGHT"] {
-//   --color-background: pink;
-// }
-
-// [data-theme="CUSTOM-THEME-SYSTEM-DEFAULT"] {
-
-//   --color-background: pink;
-// }
-
-/* 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+* {
+  ::-webkit-scrollbar {
+    width: 1rem;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: var(--color-border);
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-background);
+    border-radius: 5px;
+    border: 2px solid var(--color-border);
   }
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+// SCSS variables
+$top-bar-height: 90px;
+$logo-wrapper-height: 70px;
+$nav-bar-height: 50px;
+$footer-height: 10rem;
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
-} */
+$content-standard-margin: 0.5rem;
+
+$main-page-max-height: calc(100vh - $top-bar-height - $nav-bar-height - $content-standard-margin * 4)

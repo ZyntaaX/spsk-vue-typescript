@@ -17,7 +17,7 @@ export class UserController {
   @FirebaseAuth(true)
   @RequiresClaim('user_r')
   async getUserById(@Param('id') id: string): Promise<UserModel | null> {
-    return this.userService.user({ id });
+    return await this.userService.user({ id });
   }
 
   // @Post(':id/profile_picture')

@@ -16,8 +16,21 @@ CREATE TABLE "user"."User" (
     "last_login" TIMESTAMPTZ,
     "role_id" UUID,
     "enabled" BOOLEAN NOT NULL DEFAULT true,
+    "profile_picture_id" UUID,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "user"."ImageUpload" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "filename" TEXT NOT NULL,
+    "mimetype" TEXT NOT NULL,
+    "buffer" BYTEA NOT NULL,
+    "uploaded_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "owner_id" UUID NOT NULL,
+
+    CONSTRAINT "ImageUpload_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -43,10 +56,10 @@ CREATE TABLE "forum"."Post" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
-    "posted_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "published_at" TIMESTAMPTZ,
     "updated_at" TIMESTAMPTZ,
-    "active" BOOLEAN NOT NULL DEFAULT true,
-    "hide" BOOLEAN NOT NULL DEFAULT false,
+    "published" BOOLEAN NOT NULL DEFAULT false,
     "author_id" UUID NOT NULL,
     "category_id" UUID NOT NULL,
 
@@ -101,6 +114,9 @@ CREATE INDEX "_ClaimToUserRole_B_index" ON "user"."_ClaimToUserRole"("B");
 
 -- AddForeignKey
 ALTER TABLE "user"."User" ADD CONSTRAINT "User_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "user"."UserRole"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user"."ImageUpload" ADD CONSTRAINT "ImageUpload_owner_id_fkey" FOREIGN KEY ("owner_id") REFERENCES "user"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "forum"."Post" ADD CONSTRAINT "Post_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "user"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

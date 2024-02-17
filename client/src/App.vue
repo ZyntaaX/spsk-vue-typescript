@@ -40,7 +40,7 @@ async function signOut() {
 </script>
 
 <template>
-  <div class="theme-decider" :class="getCurrentTheme.toLowerCase()">
+  <div class="main theme-decider" :class="getCurrentTheme.toLowerCase()">
     <div
       tabindex="0"
       @keyup.esc="closeExtendedMenu"
@@ -78,7 +78,7 @@ async function signOut() {
         <div class="actions-wrapper">
           <ButtonElement v-if="authStore.isUserSignedIn" variant="ERROR" @click="$router.push({ name: 'BugReport' })">
             <div>
-              Report a problem
+              Report a bug
               <font-awesome-icon icon="fa-solid fa-bug" />
             </div>
           </ButtonElement>
@@ -107,9 +107,16 @@ async function signOut() {
     <div class="main-view--wrapper">
       <RouterView :key="$route.fullPath" />
     </div>
-
+    <div style="flex-grow: 1;"></div>
     <footer>
-      <div class="footer">hej</div>
+      <div class="footer">
+        <div class="wrapper">
+          <div class="spacer" />
+          <h2 style="font-weight: bold;">Skillingaryds Pistolskytteklubb</h2>
+          <p>Website developed and maintained by Rasmus Svanberg</p>
+          <p>Copyright © 1996-2024 Skillingaryds PSK</p>
+        </div>
+      </div>
     </footer>
   </div>
 
@@ -125,65 +132,85 @@ async function signOut() {
 
 <style lang="scss" scoped>
 
-// .cookie-accept-box {
-//   position: absolute;
-//   bottom: 20px;
-//   left: calc(50% - 350px);
-//   width: 700px;
-//   // height: 100px;
-//   background-color: white;
-//   border: 1px solid var(--color-border);
-//   border-radius: 3px;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: space-between;
+@import '@/assets/main.scss';
 
-//   p {
-//     padding: 1rem 0;
-//     font-weight: bold;
-//     text-align: center;
-
-//   }
-// }
-
-#app {
-  overflow: hidden;
+.main {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  // justify-content: flex-start;
+  // overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 
+.theme-decider {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
 
-
+#app {
+  background-color: var(--color-background);
+  // height: fit-content !important;
+  // max-height: calc(100vh - 2rem - 90px - 50px - 1rem);
+}
 
 
 
 .main-view--wrapper {
-  background-color: var(--color-main-content-bg);
+  // background-color: var(--color-main-content-bg);
+  background-color: var(--color-background-accent);
   width: 1000px;
-  // height: 100%;
-  margin: 0.5rem auto;
-  border-radius: 0.2rem;
-  overflow-y: auto;
-  padding: 0.5rem;
+  margin: $content-standard-margin auto;
+  border-radius: 5px;
+  // max-height: 5000rem;
+  padding: $content-standard-margin;
+  // overflow-y: auto;
 }
 
 footer {
-  position: fixed;
-  bottom: 0;
+  // position: fixed;
+  // bottom: 0;
   // position: absolute;
+  color: var(--color-text);
   
   .footer {
-    
     width: 100vw;
-    height: 2rem;
+    display: flex;
+    flex-direction: column;
+    // position: fixed;
+    padding: $content-standard-margin;
+    margin-top: auto;
+    // bottom: 0;
+    // text-align: center;
+    
+    // width: 100vw;
+    height: fit-content; // $footer-height;
     background-color: var(--color-main-content-bg);
+    
+    .wrapper {
+      width: 1000px;
+      margin: 0 auto;
+
+      p {
+        font-size: 0.7rem;
+      }
+    }
+    
+    .spacer {
+      flex-grow: 1;
+    }
   }
   // margin-top: auto;
 }
 
 header {
   line-height: 1.5;
-  max-height: 100vh;
+  // max-height: 100vh;
 
-  $top-bar-height: 90px;
+  // $top-bar-height: 90px;
   
   .topbar {
     // background-color: red; // var(--vt-c-black-mute);
@@ -205,7 +232,7 @@ header {
       }
 
       img {
-        height: 70px;
+        height: $logo-wrapper-height;
         width: 78.64px;
         margin: auto 0;
       }
@@ -286,7 +313,7 @@ header {
       }
 
       // width: 100%;
-      height: 50px;
+      height: $nav-bar-height;
       display: flex;
       align-items: center;
 
@@ -330,62 +357,5 @@ header {
 
   }
 }
-// }
 
-// .logo {
-//   display: block;
-//   // margin: 0 auto 2rem;
-// }
-
-// nav {
-//   width: 100%;
-//   font-size: 12px;
-//   text-align: center;
-//   margin-top: 2rem;
-// }
-
-// nav a.router-link-exact-active {
-//   color: var(--color-text);
-// }
-
-// nav a.router-link-exact-active:hover {
-//   background-color: transparent;
-// }
-
-// nav a {
-//   display: inline-block;
-//   padding: 0 1rem;
-//   border-left: 1px solid var(--color-border);
-// }
-
-// nav a:first-of-type {
-//   border: 0;
-// }
-
-// @media (min-width: 1024px) {
-//   header {
-//     // display: flex;
-//     // place-items: center;
-//     // padding-right: calc(var(--section-gap) / 2);
-//   }
-
-//   .logo {
-//     margin: 0 2rem 0 0;
-//   }
-
-//   header .wrapper {
-//     display: flex;
-//     place-items: flex-start;
-//     flex-wrap: wrap;
-//   }
-
-//   nav {
-//     text-align: left;
-//     margin-left: -1rem;
-//     font-size: 1rem;
-
-//     padding: 1rem 0;
-//     margin-top: 1rem;
-//   }
-// }
 </style>

@@ -87,14 +87,15 @@ model Claim {
 model Post {
   id            String@db.Uuid              @id @default(dbgenerated("gen_random_uuid()"))
   
-  title         String            
+  title         String   
+  subheader     String?         
   content       String      
 
-  posted_at     DateTime@db.Timestamptz     @default(now())
+  created_at    DateTime@db.Timestamptz     @default(now())     
+  published_at  DateTime?@db.Timestamptz  
   updated_at    DateTime?@db.Timestamptz    
   
-  active        Boolean                     @default(true)
-  hide          Boolean                     @default(false)
+  published     Boolean                     @default(false)
 
   author        User                        @relation(fields: [author_id], references: [id])
   author_id     String@db.Uuid     

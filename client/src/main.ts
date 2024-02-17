@@ -11,7 +11,6 @@ import i18n from "./i18n/i18n"
 import App from './App.vue'
 import router from './router'
 import { useThemeStore } from './components/theme-switcher/theme-store';
-
 library.add(faBars, faXmark, faBug, faTerminal)
 
 const app = createApp(App)

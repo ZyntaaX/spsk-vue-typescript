@@ -15,9 +15,12 @@ export type UserModel = {
             key: string;
         }[];
     };
-    posts: object[];
+    posts: {
+        id: string;
+    }[];
     comments: object[];
     profile_picture_id: string;
+    profile_picture_url?: string;
 } | undefined;
 
 export function mapUserModel(apiResponse: any) : UserModel {

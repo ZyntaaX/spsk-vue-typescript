@@ -1,23 +1,26 @@
 <template>
     <div>
-        <RadioButtonElement
+        <ContentWrapper>
+            <h3 style="margin-bottom: 0.5rem; font-style: italic;">Theme</h3>
+            <RadioButtonElement
             name="theme-switcher"
             type="radio"
             @click="setTheme('DARK')"
             :checked="themeStore.getCurrentTheme === 'DARK'" label="Dark"
-        />
-        <RadioButtonElement
+            />
+            <RadioButtonElement
             name="theme-switcher"
             type="radio"
             @click="setTheme('LIGHT')"
             :checked="themeStore.getCurrentTheme === 'LIGHT'" label="Light"
-        />
-        <RadioButtonElement
+            />
+            <RadioButtonElement
             name="theme-switcher"
             type="radio"
             @click="setTheme('SYSTEM_DEFAULT')"
             :checked="themeStore.getCurrentTheme === 'SYSTEM_DEFAULT'" label="System default"
-        />
+            />
+        </ContentWrapper>
     </div>
 </template>
 
@@ -25,6 +28,7 @@
 
 import { RadioButtonElement } from '../elements';
 import { useThemeStore, type Theme } from './theme-store';
+import ContentWrapper from '../content-wrapper.vue';
 
 const themeStore = useThemeStore();
 

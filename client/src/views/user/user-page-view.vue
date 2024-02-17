@@ -1,8 +1,8 @@
 <template>
-    <div class="user_page--wrapper" :class="{'own-page': isOwnPage}">
-        <ContentWrapper v-if="userData" :key="authStore.user?.id" >
+    <div class="user_page--wrapper" >
+        <ContentWrapper v-if="userData" :key="authStore.user?.id" :class="{'own-page': isOwnPage}" >
             <div class="top-profile--wrapper">
-                <img v-if="userProfilePicURL" alt="profile_image" :src="userProfilePicURL" />
+                <img v-if="userData.profile_picture_url" alt="profile_image" :src="userData.profile_picture_url" />
                 <img v-else src="/src/assets/default_pp.jpg" alt="profile_image" />
                 <div class="text-box">
 
@@ -31,8 +31,8 @@
 
             <div class="spacer" />
             <h3 style="font-weight: bold;" >{{ `Stats för ${userData.firstname}`}}</h3>
-            <p>Posts: {{ userData?.Posts?.length ?? 0 }}</p>
-            <p>Comments: {{ userData?.Comments?.length ?? 0 }}</p>
+            <p>Posts: {{ userData?.posts?.length ?? 0 }}</p>
+            <p>Comments: {{ userData?.comments?.length ?? 0 }}</p>
 
             <div class="spacer" />
             <h3 style="font-weight: bold;" >{{ $t('misc_texts.contact_information') }}</h3>
@@ -68,7 +68,7 @@ const route = useRoute();
 const authStore = useAuthenticationStore();
 
 const userData = ref()
-const userProfilePicURL = ref()
+// const userProfilePicURL = ref()
 
 
 const { userid } = route.params;
@@ -76,10 +76,17 @@ const { userid } = route.params;
 const isOwnPage = ref(userid === authStore.getCachedUserID())
 
 onMounted(async () => {
-    userData.value = await getUserByID(userid.toString());
-    if (userData.value.profile_picture_id) {
-        userProfilePicURL.value = await getProfileImage(userData.value.profile_picture_id);
+    if (userid !== authStore.userID) {
+        userData.value = await getUserByID(userid.toString());
+    } else {
+        userData.value = authStore.user
     }
+
+    console.log("USUSS: ", userData.value.posts);
+    
+        // if (userData.value.profile_picture_id) {
+    //     userProfilePicURL.value = await getProfileImage(userData.value.profile_picture_id);
+    // }
     // Re-check 
     // isOwnPage.value = userid === authStore.user?.id;
 })
@@ -108,7 +115,11 @@ async function uploadImage(): Promise<void> {
     const formData = new FormData();
     formData.append('file', file);
     const response = await uploadUserProfileImage(userid.toString(), formData);
-    userProfilePicURL.value = response;
+
+    userData.value.profile_picture_url = response;
+    if (userid === authStore.userID) {
+        authStore.setUser(userData.value)
+    }
 }
 
 
@@ -132,7 +143,7 @@ function getLastActiveString(): string {
 .user_page--wrapper {
     // color: var(--color-text);
 
-    &.own-page {
+    .own-page {
         border-left: 6px solid var(--primary-color);
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
@@ -147,7 +158,7 @@ function getLastActiveString(): string {
         }
         
         img {
-            border: 2px solid var(--color-border);;
+            border: 2px solid var(--color-border);
             border-radius: 5px;
             width: 8rem;
             height: 8rem;
