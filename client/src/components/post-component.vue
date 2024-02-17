@@ -58,8 +58,8 @@ function getDateTimeString(date: DateTime): string {
     }
 
     img {
-        height: 6rem;
-        width: 6rem;
+        height: 6.5rem;
+        width: 6.5rem;
         border-radius: 5px;
         margin: auto 0.5rem;
         object-fit: cover;

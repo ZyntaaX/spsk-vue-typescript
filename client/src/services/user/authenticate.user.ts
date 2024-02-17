@@ -11,6 +11,8 @@ export async function authenticateUserOnServer(token: string, external_id: strin
 
         if (user?.profile_picture_id) {
             user.profile_picture_url = await getProfileImage(user?.profile_picture_id ?? "");
+        } else if (user) {
+            user.profile_picture_url = '/src/assets/default_pp.jpg';
         }
 
         return user;

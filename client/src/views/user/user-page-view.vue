@@ -3,7 +3,7 @@
         <ContentWrapper v-if="userData" :key="authStore.user?.id" :class="{'own-page': isOwnPage}" >
             <div class="top-profile--wrapper">
                 <img v-if="userData.profile_picture_url" alt="profile_image" :src="userData.profile_picture_url" />
-                <img v-else src="/src/assets/default_pp.jpg" alt="profile_image" />
+                <!-- <img v-else src="/src/assets/default_pp.jpg" alt="profile_image" /> -->
                 <div class="text-box">
 
                     <h2 style="font-weight: bold; margin: 0; padding: 0;">
