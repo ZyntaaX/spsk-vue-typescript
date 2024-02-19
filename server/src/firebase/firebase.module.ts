@@ -12,6 +12,12 @@ export const FIREBASE_ADMIN = Symbol('FirebaseAdmin');
       provide: FIREBASE_ADMIN,
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
+        console.log(
+          'ENV: ',
+          configService.get<string>('FIREBASE_ADMIN_PROJECT_ID'),
+        );
+        console.log('ENV2: ', process.env.FIREBASE_ADMIN_PROJECT_ID);
+
         const firebaseConfig = {
           type: configService.get<string>('FIREBASE_ADMIN_TYPE'),
           project_id: configService.get<string>('FIREBASE_ADMIN_PROJECT_ID'),

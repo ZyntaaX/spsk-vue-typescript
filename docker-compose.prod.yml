@@ -1,29 +1,8 @@
 version: "3.8"
 
 services:
-  client:
-    container_name: spsk-client
-    image: spsk-client-prod:1.0.0
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    ports:
-      - "9000:8765" # 8080 HAS WORKED
-    restart: unless-stopped
-    networks:
-      - spsk-shared-network
-    environment:
-      - VITE_SERVER_BASE_URL=http://localhost:8090
-      # Firebase configuration
-      - VITE_FIREBASE_APIKEY="AIzaSyAxnpe6UdBRhoqIyuHWJNb0uAAhkcbmrzA"
-      - VITE_FIREBASE_AUTHDOMAIN="spsk-vue-typescript.firebaseapp.com"
-      - VITE_FIREBASE_PROJECT_ID="spsk-vue-typescript"
-      - VITE_FIREBASE_STORAGE_BUCKET="spsk-vue-typescript.appspot.com"
-      - VITE_FIREBASE_MESSAGING_SENDER_ID="320594821227"
-      - VITE_FIREBASE_APP_ID="1:320594821227:web:1e57774c1bf180d081712e"
-
   postgres:
-    container_name: spsk-db
+    container_name: spsk-postgres
     image: postgres:16.1
     # restart: unless-stopped # always
     environment:
@@ -36,18 +15,65 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
-  server:
-    container_name: spsk-server
-    restart: unless-stopped
-    image: spsk-server-prod:1.0.0
+  client:
+    container_name: spsk-client
+    image: spsk-client-prod:1.0.0
     build:
-      context: server
-      # target: base
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.client
+      args:
+        ARG_VITE_CLIENT_PORT: ${VITE_CLIENT_PORT}
+        ARG_VITE_SERVER_BASE_URL: ${VITE_SERVER_BASE_URL}
+        ARG_VITE_FIREBASE_APIKEY: ${VITE_FIREBASE_APIKEY}
+        ARG_VITE_FIREBASE_AUTHDOMAIN: ${VITE_FIREBASE_AUTHDOMAIN}
+        ARG_VITE_FIREBASE_PROJECT_ID: ${VITE_FIREBASE_PROJECT_ID}
+        ARG_VITE_FIREBASE_STORAGE_BUCKET: ${VITE_FIREBASE_STORAGE_BUCKET}
+        ARG_VITE_FIREBASE_MESSAGING_SENDER_ID: ${VITE_FIREBASE_MESSAGING_SENDER_ID}
+        ARG_VITE_FIREBASE_APP_ID: ${VITE_FIREBASE_APP_ID}
     ports:
-      - 8090:3000
+      - "9000:80" # 8080 HAS WORKED
+    restart: unless-stopped
     networks:
       - spsk-shared-network
+
+  server:
+    container_name: spsk-server
+    image: spsk-server-prod:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+      args:
+        ARG_SERVER_PORT: ${SERVER_PORT}
+        ARG_DATABASE_URL: ${DATABASE_URL}
+        ARG_FIREBASE_ADMIN_TYPE: ${FIREBASE_ADMIN_TYPE}
+        ARG_FIREBASE_ADMIN_PROJECT_ID: ${FIREBASE_ADMIN_PROJECT_ID}
+        ARG_FIREBASE_ADMIN_PRIVATE_KEY_ID: ${FIREBASE_ADMIN_PRIVATE_KEY_ID}
+        ARG_FIREBASE_ADMIN_PRIVATE_KEY: ${FIREBASE_ADMIN_PRIVATE_KEY}
+        ARG_FIREBASE_ADMIN_CLIENT_EMAIL: ${FIREBASE_ADMIN_CLIENT_EMAIL}
+        ARG_FIREBASE_ADMIN_CLIENT_ID: ${FIREBASE_ADMIN_CLIENT_ID}
+        ARG_FIREBASE_ADMIN_AUTH_URI: ${FIREBASE_ADMIN_AUTH_URI}
+        ARG_FIREBASE_ADMIN_TOKEN_URI: ${FIREBASE_ADMIN_TOKEN_URI}
+        ARG_FIREBASE_ADMIN_AUTH_PROVIDER_CERT: ${FIREBASE_ADMIN_AUTH_PROVIDER_CERT}
+        ARG_FIREBASE_ADMIN_CLIENT_CERT: ${FIREBASE_ADMIN_CLIENT_CERT}
+        ARG_FIREBASE_ADMIN_UNIVERSE_DOMAIN: ${FIREBASE_ADMIN_UNIVERSE_DOMAIN}
+    ports:
+      - "3000:3000"
+    # restart: unles+s-stopped
+    networks:
+      - spsk-shared-network
+
+  # server:
+  #   container_name: spsk-server
+  #   restart: unless-stopped
+  #   image: spsk-server-prod:1.0.0
+  #   build:
+  #     context: server
+  #     # target: base
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 8090:3000
+  #   networks:
+  #     - spsk-shared-network
   #   depends_on:
   #     - postgres
   #   environment:
